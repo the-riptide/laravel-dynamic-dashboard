@@ -14,6 +14,7 @@ class DynamicDashboardServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__.'/../views' => resource_path('views/vendor/dyndash'),
             __DIR__.'/../config/dyndash.php' => config_path('dyndash.php'),
+            __DIR__.'/ExampleType/Example.php' => app_path('dyndash/Example.php'),
         ]);
 
         $this->mergeConfigFrom(
