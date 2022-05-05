@@ -8,11 +8,9 @@ use Illuminate\Support\Facades\File;
 
 class Base {
 
-    private $typePath = 'App\Dynamic\Types\\';
-
     protected function getType($type) { 
 
-        $model = $this->typePath . Str::of($type)->ucfirst()->singular(); 
+        $model = 'App\\' . config('dyndash.folder') . '\\' . Str::of($type)->ucfirst()->singular(); 
 
         if (class_exists($model)) {
 
@@ -25,7 +23,7 @@ class Base {
 
     protected function getAllTypes() 
     {
-        $files = File::allFiles(config('dyndash.path'));
+        $files = File::allFiles(app_path(config('dyndash.folder')));
 
         return collect($files)->map(
             fn ($file) => Str::before($file->getBasename(), '.')  
