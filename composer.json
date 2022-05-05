@@ -1,0 +1,41 @@
+{
+    "name": "the-riptide/laravel-dynamic-dashboard",
+    "description": "A way to generate a dynamic dashboard quickly and easily",
+    "type": "library",
+    "license": "MIT",
+    "keywords": [
+        "laravel",
+        "dashboard",
+        "dynamic"
+    ],
+    
+    "authors": [ 
+        {
+            "name" : "Jelte ten Holt",
+            "email" : "jelte@theriptide.net",
+            "homepage": "https://www.theriptide.net/",
+            "role" : "developer"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [
+                "TheRiptide\\LaravelDynamicDashboard\\DynamicDashboardProvider"
+            ]
+        }
+    },
+
+    "autoload" : {
+        "psr-4" : {
+            "TheRiptide\\LaravelDynamicDashboard\\": "src/"
+
+        }
+    },
+
+    "minimum-stability": "dev",
+    "require": {
+        "php": "^8.0",
+        "laravel/framework": "^8.0|^9.0",
+        "livewire/livewire": "^2.5"        
+    }
+}
