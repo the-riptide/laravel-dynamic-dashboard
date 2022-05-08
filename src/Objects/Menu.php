@@ -11,7 +11,10 @@ class Menu extends Base
 
     public function __construct() {
 
-        $this->items = $this->getAllTypes()->mapWithKeys(
+
+        $this->items = $this->getAllTypes()
+        ->filter(fn ($item) => $item !== 'Example' && $item !==  'example' )
+        ->mapWithKeys(
             fn ($item) => [
                 $item => Str::of($item)->lower()
             ]
