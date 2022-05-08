@@ -2,7 +2,10 @@
 
 namespace TheRiptide\LaravelDynamicDashboard;
 
+use Livewire\Livewire;
 use Illuminate\Support\ServiceProvider;
+use TheRiptide\LaravelDynamicDashboard\Http\Livewire\DashboardIndex;
+use TheRiptide\LaravelDynamicDashboard\Http\Livewire\DashboardManage;
 
 class DynamicDashboardServiceProvider extends ServiceProvider
 {
@@ -24,6 +27,10 @@ class DynamicDashboardServiceProvider extends ServiceProvider
         $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
 
         $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
+
+
+        Livewire::component('dashboard-manage', DashboardManage::class);
+        Livewire::component('dashboard-index', DashboardIndex::class);
     }
 
     public function register() {

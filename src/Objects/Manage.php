@@ -11,6 +11,7 @@ class Manage extends Base
     public $models;
     private $type;
     private $modelPath = 'TheRiptide\LaravelDynamicDashboard\Models\Dyn';
+    private $previous;
 
     public function __construct(string $type, int|null $id = null)
     {        
@@ -40,6 +41,28 @@ class Manage extends Base
 
         
         return $this;
+    }
+
+    public function save($contents) 
+    {
+
+        $models = $this->models;
+
+        $this->previous = $models->shift();
+        
+        $models->map(
+            function ($item) use ($contents) {
+                $item->setContent($contents[$item->name]);
+                $item->save();
+                
+                if (class_basename($this->previous) == 'DynHead' ) $this->previous->setSlug($item->content);
+
+                $this->previous->conNext($item);
+                $this->previous->save();
+
+                $this->previous = $item;
+            }
+        );
     }
 
     private function getSetModels(int $id) : Collection 

@@ -2,7 +2,7 @@
 
 namespace TheRiptide\LaravelDynamicDashboard\Models;
 
-use App\Dynamic\Front\Full;
+use TheRiptide\LaravelDynamicDashboard\Objects\Full;
 use Illuminate\Support\Str;
 use TheRiptide\LaravelDynamicDashboard\Models\DynBase;
 

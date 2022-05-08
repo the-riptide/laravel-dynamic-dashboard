@@ -11,7 +11,6 @@ use TheRiptide\LaravelDynamicDashboard\Security\Authorize;
 
 class DashboardManage extends Component
 {
-
     use WithFileUploads;
 
     public $head;
@@ -48,27 +47,38 @@ class DashboardManage extends Component
 
     public function save()
     {
+
         if (! (New Authorize)->canTakeAction()) return abort (403);
 
         $this->validate();
 
         $dynamic = (new Manage($this->type, $this->identifer));
-        $models = $dynamic->models;
-        $this->previous = $models->shift();
-        
-        $models->map(
-            function ($item) {
-                $item->setContent($this->{$item->name});
-                $item->save();
-                
-                if (class_basename($this->previous) == 'DynHead' ) $this->previous->setSlug($item->content);
 
-                $this->previous->conNext($item);
-                $this->previous->save();
-
-                $this->previous = $item;
-            }
+        $dynamic->save(
+            $dynamic->models
+            ->filter(
+                fn ($item) => isset($item->name)
+            )->mapWithKeys(
+                fn ($item) => [$item->name => $this->{$item->name}] 
+            )
         );
+
+        // $models = $dynamic->models;
+        // $this->previous = $models->shift();
+        
+        // $models->map(
+        //     function ($item) {
+        //         $item->setContent($this->{$item->name});
+        //         $item->save();
+                
+        //         if (class_basename($this->previous) == 'DynHead' ) $this->previous->setSlug($item->content);
+
+        //         $this->previous->conNext($item);
+        //         $this->previous->save();
+
+        //         $this->previous = $item;
+        //     }
+        // );
 
         return redirect()->route('dyndash.index', [$this->type]);
     }

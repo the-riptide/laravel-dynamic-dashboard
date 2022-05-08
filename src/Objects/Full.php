@@ -1,6 +1,6 @@
 <?php 
 
-namespace App\Dynamic\Front;
+namespace TheRiptide\LaravelDynamicDashboard\Objects;
 
 use TheRiptide\LaravelDynamicDashboard\Models\DynHead;
 use Illuminate\Support\Str;
