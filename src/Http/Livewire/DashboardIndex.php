@@ -2,11 +2,13 @@
 
 namespace TheRiptide\LaravelDynamicDashboard\Http\Livewire;
 
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use TheRiptide\LaravelDynamicDashboard\Models\DynHead;
 use Livewire\Component;
 use TheRiptide\LaravelDynamicDashboard\Objects\Menu;
 use TheRiptide\LaravelDynamicDashboard\Objects\Index;
 use TheRiptide\LaravelDynamicDashboard\Collections\Dynamic;
+use TheRiptide\LaravelDynamicDashboard\Security\Authorize;
 
 class DashboardIndex extends Component
 {
@@ -19,10 +21,12 @@ class DashboardIndex extends Component
     public function mount($type) 
     {
         $this->type = $type;
+
     }
 
     public function render()
     {
+
         $this->posts = (New Dynamic($this->type))->links;
         $index = (new Index($this->type)); 
         $this->canDelete = $index->canDelete;   
@@ -39,6 +43,8 @@ class DashboardIndex extends Component
 
     public function delete()
     {
+        if (! (new Authorize)->canTakeAction()) return abort(403);
+
         DynHead::find($this->deleteId)->deleteAll();
 
     }

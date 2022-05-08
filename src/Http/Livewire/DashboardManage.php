@@ -7,6 +7,7 @@ use Livewire\WithFileUploads;
 use TheRiptide\LaravelDynamicDashboard\Objects\Manage;
 use TheRiptide\LaravelDynamicDashboard\Objects\Menu;
 use Illuminate\Support\Facades\Cache;
+use TheRiptide\LaravelDynamicDashboard\Security\Authorize;
 
 class DashboardManage extends Component
 {
@@ -47,6 +48,8 @@ class DashboardManage extends Component
 
     public function save()
     {
+        if (! (New Authorize)->canTakeAction()) return abort (403);
+
         $this->validate();
 
         $dynamic = (new Manage($this->type, $this->identifer));
