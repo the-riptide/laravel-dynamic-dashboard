@@ -138,7 +138,7 @@ Like so:
     }
 </code>
 
-If you do this, then the package will look for a function called get[your field]. In this case, it would look for getShow. The model associated with that field will be passed in as a parameter. You should return whatever you would like to show on the dashboard as a result of that value.
+If you do this, then the package will look for a function called get[your field]. In this case, it would look for getShow. The model associated with that field will be passed in as a parameter. You should return whatever you would like to show on the dashboard as a result of that value. You can access the value by calling the name of the field (in this case $post->show).
 
 ### Routes
 
