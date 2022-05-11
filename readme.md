@@ -37,11 +37,10 @@ To create a new dashboard item, create a new php file here and copy the code bel
 
 <code>
 
-<?php
-
 namespace app\Dyndash;
 
-    class YourNameHere{
+    class YourNameHere
+    {
 
         public function index() 
         {
