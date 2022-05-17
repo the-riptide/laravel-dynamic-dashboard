@@ -19,7 +19,7 @@ This means that this dashboard is more demanding than other models, which makes 
 
 To install this package, use:
 
-<code> php composer install the-riptide/laravel-dynamic-dashboard </code>
+<code> php composer require the-riptide/laravel-dynamic-dashboard </code>
 
 After that, you'll need to migrate. You can publish the files using:
 
