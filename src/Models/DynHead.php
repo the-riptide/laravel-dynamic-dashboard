@@ -2,8 +2,8 @@
 
 namespace TheRiptide\LaravelDynamicDashboard\Models;
 
-use TheRiptide\LaravelDynamicDashboard\Objects\Full;
 use Illuminate\Support\Str;
+use TheRiptide\LaravelDynamicDashboard\Objects\Item;
 use TheRiptide\LaravelDynamicDashboard\Models\DynBase;
 
 class DynHead extends DynBase
@@ -18,9 +18,9 @@ class DynHead extends DynBase
             : $text . '-' . $count;
     }
 
-    public function links() : Full {
+    public function links() : Item {
 
-        return new Full($this);
+        return new Item($this);
     }
 
     public function deleteAll() {

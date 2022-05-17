@@ -25,8 +25,6 @@ class Base {
     {
         $files = File::allFiles(app_path(config('dyndash.folder')));
 
-
-
         return collect($files)
         ->map(
             fn ($file) => Str::before($file->getBasename(), '.')  

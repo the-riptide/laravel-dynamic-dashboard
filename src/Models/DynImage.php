@@ -14,6 +14,6 @@ class DynImage extends DynModel
 
     public function setContent($content) {
 
-        $this->content = 'dynImages' . '/' . $content->store('/', 'dynImages');
+        $this->content = 'public/' . $content->store('/dynImages', 'public');
     }
 }

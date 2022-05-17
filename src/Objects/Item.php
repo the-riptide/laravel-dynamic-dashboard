@@ -6,18 +6,26 @@ use TheRiptide\LaravelDynamicDashboard\Models\DynHead;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Schema;
 
-class Full {
+class Item extends Base {
 
     public $slug;
     public $user_id;
-    public $type;
     public $id;
     
+    private $modelType;
+
     public function __construct(DynHead $head) {
 
         $models = $head->getAll();
         $this->prepHead($models->shift());
         $this->prepFields($models);
+
+        $this->modelType = $this->getType($head->type);
+    }
+
+    public function toType() 
+    {
+        return $this->modelType->prepForFront($this);
     }
 
     private function prepHead($head) {
