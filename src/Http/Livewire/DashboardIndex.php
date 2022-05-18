@@ -27,13 +27,12 @@ class DashboardIndex extends Component
     public function render()
     {
 
-        $this->posts = (New Dynamic($this->type))->links;
-        $index = (new Index($this->type)); 
-        $this->canDelete = $index->canDelete;   
-        $this->heads = $index->heads;
+        $this->posts = (New Dynamic($this->type))->links();
+        $this->canDelete = $this->posts->first()->canDelete();   
+        $this->heads = $this->posts->first()->tableHeads();
 
         return view('dyndash::index', [
-            'field' => $index,
+            'field' => $this->heads,
 
         ])->extends('dyndash::layout', [
             'menuItems' => (new Menu)->items

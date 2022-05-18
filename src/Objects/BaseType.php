@@ -17,16 +17,46 @@ class BaseType {
     public $id;
     
     private $models;
-    private $head;
+    private $dynHead;
+    private $canDelete = true;
 
     private $modelPath = 'TheRiptide\LaravelDynamicDashboard\Models\Dyn';
     
     public function __construct(DynHead|string $head = null) {
 
         $head
-            ? $this->prepAll($head)
+            ? $this->prepare($head)
             : $this->getNewModels();
     }
+
+    public function canDelete()
+    {
+        return $this->canDelete;
+    }
+    
+    public function tableHeads() : Collection
+    {
+        return $this->index()->map(
+            function($item, $key) {
+
+                if (is_array($item) || $item instanceof Collection) return $key;
+                
+                return $item;
+            }
+        )->filter();
+    }
+
+    public function setValue($field) : string
+    {
+        if (isset($this->index()[$field]['function']) && $this->index()[$field]['function']) 
+        {
+            return $this->$field();
+        } 
+
+        return $this->$field;
+    }
+
+
 
     public function models()
     {
@@ -35,7 +65,7 @@ class BaseType {
 
     public function head()
     {
-        return $this->head;
+        return $this->dynHead;
     }
 
     public function rules()
@@ -58,12 +88,12 @@ class BaseType {
 
     }
 
-    private function prepAll($head)
+    private function prepare($head)
     {
         if (is_string($head)) $head = DynHead::firstWhere('slug', $head);
         $this->models = $head->getAll();
-        $this->head = $this->models->shift();
-        $this->prepHead($this->head);
+        $this->dynHead = $this->models->shift();
+        $this->prepHead($this->dynHead);
         $this->prepFields($this->models);
     }
 
@@ -96,7 +126,7 @@ class BaseType {
 
     public function save($contents) 
     {
-        $this->previous = $this->head;
+        $this->previous = $this->dynHead;
         
         $this->models->map(
             function ($item) use ($contents) {
@@ -137,8 +167,8 @@ class BaseType {
 
     private function getNewModels() 
     {
-        $this->head = new DynHead;
-        $this->head->type = class_basename(Str::lower(class_basename($this)));
+        $this->dynHead = new DynHead;
+        $this->dynHead->type = class_basename(Str::lower(class_basename($this)));
 
         $this->models = $this->generateComponents();
     }

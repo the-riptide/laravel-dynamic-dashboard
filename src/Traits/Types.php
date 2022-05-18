@@ -9,13 +9,15 @@ use TheRiptide\LaravelDynamicDashboard\Models\DynHead;
 
 trait Types {
 
-    public function getType($type, $id = null) { 
+    public function getType($type, DynHead|string $head = null) { 
 
         $model = 'App\\' . config('dyndash.folder') . '\\' . Str::of($type)->ucfirst()->singular(); 
 
         if (class_exists($model)) {
 
-            $model = new $model(DynHead::find($id));
+            if(is_string($head)) $head = DynHead::Find($head);
+
+            $model = new $model($head);
             return $model;
         }
 

@@ -55,7 +55,7 @@ class DashboardManage extends Component
 
         $this->validate();
 
-        $dynamic = $this->getType($this->type, $this->identfier);
+        $dynamic = $this->getType($this->type, $this->identfier ?? null);
 
         $dynamic->save(
             $dynamic->models()

@@ -8,7 +8,6 @@ use TheRiptide\LaravelDynamicDashboard\Traits\Types;
 
 class Index 
 {
-
     use Types;
 
     private $type;
@@ -18,6 +17,7 @@ class Index
     public function __construct(string $type)
     {        
         $this->type = $this->getType($type);
+
         $this->heads = $this->prepTableHeads();
 
         $this->canDelete = ! isset($this->type->canDelete) || $this->type->canDelete == true;
