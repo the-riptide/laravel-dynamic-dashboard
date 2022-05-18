@@ -1,27 +1,28 @@
 <?php 
 
-namespace TheRiptide\LaravelDynamicDashboard\Objects;
+namespace TheRiptide\LaravelDynamicDashboard\Traits;
 
 use Exception;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\File;
+use TheRiptide\LaravelDynamicDashboard\Models\DynHead;
 
-class Base {
+trait Types {
 
-    protected function getType($type) { 
+    public function getType($type, $id = null) { 
 
         $model = 'App\\' . config('dyndash.folder') . '\\' . Str::of($type)->ucfirst()->singular(); 
 
         if (class_exists($model)) {
 
-            $model = new $model;
+            $model = new $model(DynHead::find($id));
             return $model;
         }
 
         throw new Exception("Not an existing type", 1);
     }
 
-    protected function getAllTypes() 
+    public function getAllTypes() 
     {
         $files = File::allFiles(app_path(config('dyndash.folder')));
 

@@ -4,9 +4,13 @@ namespace TheRiptide\LaravelDynamicDashboard\Objects;
 
 use Illuminate\Support\Str;
 use Illuminate\Support\Collection;
+use TheRiptide\LaravelDynamicDashboard\Traits\Types;
 
-class Index extends Base 
+class Index 
 {
+
+    use Types;
+
     private $type;
     public $heads;
     public $canDelete;

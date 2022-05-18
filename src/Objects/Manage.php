@@ -5,24 +5,28 @@ namespace TheRiptide\LaravelDynamicDashboard\Objects;
 use TheRiptide\LaravelDynamicDashboard\Models\DynHead;
 use Illuminate\Support\Str;
 use Illuminate\Support\Collection;
+use TheRiptide\LaravelDynamicDashboard\Traits\Types;
 
-class Manage extends Base
+class Manage
 {
+    use Types;
+
     public $models;
+    public $head;
     private $type;
     private $modelPath = 'TheRiptide\LaravelDynamicDashboard\Models\Dyn';
     private $previous;
 
     public function __construct(string $type, int|null $id = null)
     {        
-        $this->type = $this->getType($type);
-
-        $this->models = $id ? $this->getSetModels($id) : $this->getNewModels();
+        $this->type = $this->getType($type, $id);        
+        $this->models = $this->type->models();
     }
 
     /** adds exta fields like component names and placeholder texts */
     public function dashPrep()
     {
+
         $fields = $this->type->fields();
 
         $this->models->map(
@@ -38,8 +42,6 @@ class Manage extends Base
             }
         );
 
-
-        
         return $this;
     }
 
@@ -65,20 +67,20 @@ class Manage extends Base
         );
     }
 
-    private function getSetModels(int $id) : Collection 
-    {
-        return DynHead::where('type', Str::lower(class_basename($this->type)))->find($id)->getAll();
-    }   
+    // private function getSetModels(int $id) : Collection 
+    // {
+    //     return DynHead::where('type', Str::lower(class_basename($this->type)))->find($id)->getAll();
+    // }   
 
-    private function getNewModels() : Collection 
-    {
-        $head = new DynHead;
-        $head->type = class_basename($this->type);
+    // private function getNewModels() : Collection 
+    // {
+    //     $head = new DynHead;
+    //     $head->type = class_basename($this->type);
 
-        return collect([$head])
-            ->concat($this->generateComponents())
-            ->flatten();
-    }
+    //     return collect([$head])
+    //         ->concat($this->generateComponents())
+    //         ->flatten();
+    // }
 
     public function rules() : Collection
     {
@@ -99,20 +101,20 @@ class Manage extends Base
             );
     }
 
-    private function generateComponents() : Collection 
-    {
-        return collect([
-            $this->type->fields()->map(
-                function ($item, $key) {
+    // private function generateComponents() : Collection 
+    // {
+    //     return collect([
+    //         $this->type->fields()->map(
+    //             function ($item, $key) {
 
-                    $model = $this->modelPath .  Str::ucfirst($item['type']);
-                    $model = (new $model);
-                    $model->name = $key;
+    //                 $model = $this->modelPath .  Str::ucfirst($item['type']);
+    //                 $model = (new $model);
+    //                 $model->name = $key;
 
-                    return $model; 
-                }
-            )
-        ]);
-    }
+    //                 return $model; 
+    //             }
+    //         )
+    //     ]);
+    // }
 
 } 

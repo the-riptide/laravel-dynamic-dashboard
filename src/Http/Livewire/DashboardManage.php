@@ -8,10 +8,11 @@ use TheRiptide\LaravelDynamicDashboard\Objects\Manage;
 use TheRiptide\LaravelDynamicDashboard\Objects\Menu;
 use Illuminate\Support\Facades\Cache;
 use TheRiptide\LaravelDynamicDashboard\Security\Authorize;
+use TheRiptide\LaravelDynamicDashboard\Traits\Types;
 
 class DashboardManage extends Component
 {
-    use WithFileUploads;
+    use WithFileUploads, Types;
 
     public $head;
     public $rules;
@@ -24,12 +25,14 @@ class DashboardManage extends Component
         $this->type = $type;
         $this->identifer = $id;                
 
-        $dynamic = (new Manage($this->type, $this->identifer))->dashPrep();    
-        $dynamic->models->shift();
+        $dynamic = $this->getType($type, $id);
+        $dynamic = $dynamic->dashboardFields();
+
         $this->rules = $dynamic->rules();
 
-        $dynamic->models->map(fn ($item) => $this->{$item->name} = $item->content);
-        Cache::put('dynamicModels', $dynamic->models);
+        $dynamic->models()->map(fn ($item) => $this->{$item->name} = $item->content);
+
+        Cache::put('dynamicModels', $dynamic->models());
     }
 
     public function rules()
@@ -52,33 +55,14 @@ class DashboardManage extends Component
 
         $this->validate();
 
-        $dynamic = (new Manage($this->type, $this->identifer));
+        $dynamic = $this->getType($this->type, $this->identfier);
 
         $dynamic->save(
-            $dynamic->models
-            ->filter(
-                fn ($item) => isset($item->name)
-            )->mapWithKeys(
+            $dynamic->models()
+            ->mapWithKeys(
                 fn ($item) => [$item->name => $this->{$item->name}] 
             )
         );
-
-        // $models = $dynamic->models;
-        // $this->previous = $models->shift();
-        
-        // $models->map(
-        //     function ($item) {
-        //         $item->setContent($this->{$item->name});
-        //         $item->save();
-                
-        //         if (class_basename($this->previous) == 'DynHead' ) $this->previous->setSlug($item->content);
-
-        //         $this->previous->conNext($item);
-        //         $this->previous->save();
-
-        //         $this->previous = $item;
-        //     }
-        // );
 
         return redirect()->route('dyndash.index', [$this->type]);
     }

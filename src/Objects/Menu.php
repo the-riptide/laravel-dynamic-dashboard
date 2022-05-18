@@ -3,9 +3,11 @@
 namespace TheRiptide\LaravelDynamicDashboard\Objects;
 
 use Illuminate\Support\Str;
+use TheRiptide\LaravelDynamicDashboard\Traits\Types;
 
-class Menu extends Base
+class Menu
 {
+    use Types;
 
     public $items;
 

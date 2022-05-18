@@ -5,8 +5,11 @@ namespace TheRiptide\LaravelDynamicDashboard\Objects;
 use TheRiptide\LaravelDynamicDashboard\Models\DynHead;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Schema;
+use TheRiptide\LaravelDynamicDashboard\Traits\Types;
 
-class Item extends Base {
+class Item {
+
+    use Types;
 
     public $slug;
     public $user_id;
