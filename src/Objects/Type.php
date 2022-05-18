@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Type extends Model {
 
-    public function prepForFront(Full $full)
+    public function prepForFront(Item $full)
     {
         foreach ($full as $key => $attribute) $this->$key = $attribute;
 
