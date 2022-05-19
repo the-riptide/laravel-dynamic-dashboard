@@ -14,4 +14,13 @@ class DynDate extends DynModel
         'content' => 'datetime',
     ];
 
+
+    public function getContent()
+    {
+        return $this->content
+            ? $this->content->format('Y-m-d')
+            : null;
+    }
+
+
 }

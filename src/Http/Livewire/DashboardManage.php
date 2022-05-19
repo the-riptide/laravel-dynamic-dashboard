@@ -29,7 +29,7 @@ class DashboardManage extends Component
 
         $this->rules = $dynamic->rules();
         
-        $dynamic->models()->map(fn ($item) => $this->{$item->name} = $item->content);
+        $dynamic->models()->map(fn ($item) => $this->{$item->name} = $item->getContent());
 
         Cache::put('dynamicObject', $dynamic);
     }

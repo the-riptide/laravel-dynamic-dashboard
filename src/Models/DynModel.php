@@ -18,6 +18,12 @@ abstract class DynModel extends DynBase
     {
         $this->content = $content;
     }
+
+    public function getContent()
+    {
+        return $this->content;
+    }
+
 }
 
 
