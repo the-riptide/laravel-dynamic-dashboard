@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('next_model')->nullable();
             $table->unsignedBigInteger('next_model_id')->nullable();
             $table->string('name');
-            $table->mediumText('content');
+            $table->mediumText('content')->nullable();
             $table->timestamps();
         });
     }

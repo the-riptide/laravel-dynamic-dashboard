@@ -10,4 +10,8 @@ class DynDate extends DynModel
     public $component = 'simple';
     public $type = 'date';
 
+    protected $casts = [
+        'content' => 'datetime',
+    ];
+
 }
