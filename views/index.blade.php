@@ -32,7 +32,7 @@
             <tr>
                 @foreach ($heads as $head)
                     <x-dyndash::index.tbl-cell class="text-gray-900">
-                        {{ $field->setValue($post, $head) }}
+                        {{ $post->setValue($head) }}
                     </x-dyndash::index.tbl-cell>
                 @endforeach
 
