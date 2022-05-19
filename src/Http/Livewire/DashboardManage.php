@@ -7,11 +7,11 @@ use Livewire\WithFileUploads;
 use TheRiptide\LaravelDynamicDashboard\Objects\Menu;
 use Illuminate\Support\Facades\Cache;
 use TheRiptide\LaravelDynamicDashboard\Security\Authorize;
-use TheRiptide\LaravelDynamicDashboard\Traits\Types;
+use TheRiptide\LaravelDynamicDashboard\Traits\GetType;
 
 class DashboardManage extends Component
 {
-    use WithFileUploads, Types;
+    use WithFileUploads, GetType;
 
     public $head;
     public $rules;
@@ -28,10 +28,10 @@ class DashboardManage extends Component
         $dynamic = $dynamic->dashboardFields();
 
         $this->rules = $dynamic->rules();
-
+        
         $dynamic->models()->map(fn ($item) => $this->{$item->name} = $item->content);
 
-        Cache::put('dynamicModels', $dynamic->models());
+        Cache::put('dynamicObject', $dynamic);
     }
 
     public function rules()
@@ -54,7 +54,8 @@ class DashboardManage extends Component
 
         $this->validate();
 
-        $dynamic = $this->getType($this->type, $this->identfier ?? null);
+        // $dynamic = $this->getType($this->type, $this->identfier ?? null);
+        $dynamic = Cache::get('dynamicObject');
 
         $dynamic->save(
             $dynamic->models()

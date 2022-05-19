@@ -7,7 +7,7 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\File;
 use TheRiptide\LaravelDynamicDashboard\Models\DynHead;
 
-trait Types {
+trait GetType {
 
     public function getType($type, DynHead|string $head = null) { 
 

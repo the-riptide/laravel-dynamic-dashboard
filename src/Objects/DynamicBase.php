@@ -5,19 +5,19 @@ namespace TheRiptide\LaravelDynamicDashboard\Objects;
 use Illuminate\Support\Str;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Schema;
-use TheRiptide\LaravelDynamicDashboard\Traits\Types;
 use TheRiptide\LaravelDynamicDashboard\Models\DynHead;
+use TheRiptide\LaravelDynamicDashboard\Traits\GetType;
 
 class DynamicBase {
 
-    use Types;
+    use GetType;
 
     public $slug;
     public $user_id;
     public $id;
     
-    private $models;
-    private $dynHead;
+    private $dyn_models;
+    private $dyn_head;
     private $canDelete = true;
 
     private $modelPath = 'TheRiptide\LaravelDynamicDashboard\Models\Dyn';
@@ -58,28 +58,30 @@ class DynamicBase {
 
     public function models()
     {
-        return $this->models;
+        return $this->dyn_models;
     }
 
     public function head()
     {
-        return $this->dynHead;
+        return $this->dyn_head;
     }
 
     public function rules()
     {
-        return $this->models
+        return $this->dyn_models
             ->filter(
+                fn ($item) => $item->rules
+            )->mapWithKeys(
                 function ($item) {
-
-                    return $item->rules;
-                })->mapWithKeys(function ($item) {
+                    
                     if ($item->rules) {
-                        
-                        if (is_array($item->rules)) $rules = $item->exists() ? $item->rules[0] : $item->rules[1];    
-                        else $rules = $item->rules;
-                     
-                        return [$item->name => $rules];
+                            
+                        if (is_array($item->rules)) {
+                            return [$item->name => $item->exists ? $item->rules[1] : $item->rules[0] ];
+                        }    
+                        else { 
+                            return [$item->name => $item->rules];
+                        }                        
                     }
                 }
             );
@@ -88,10 +90,10 @@ class DynamicBase {
     private function prepare($head)
     {
         if (is_string($head)) $head = DynHead::firstWhere('slug', $head);
-        $this->models = $head->getAll();
-        $this->dynHead = $this->models->shift();
-        $this->prepHead($this->dynHead);
-        $this->prepFields($this->models);
+        $this->dyn_models = $head->getAll();
+        $this->dyn_head = $this->dyn_models->shift();
+        $this->prepHead($this->dyn_head);
+        $this->prepFields($this->dyn_models);
     }
 
     private function prepHead($head) {
@@ -123,14 +125,15 @@ class DynamicBase {
 
     public function save($contents) 
     {
-        $this->previous = $this->dynHead;
+        $this->previous = $this->dyn_head;
         
-        $this->models->map(
+        $this->dyn_models->map(
             function ($item) use ($contents) {
+                $item->unsetTempAttributes();
                 $item->setContent($contents[$item->name]);
                 $item->save();
                 
-                if (class_basename($this->previous) == 'DynHead' ) $this->previous->setSlug($item->content);
+                if (class_basename($this->previous) == 'dyn_head' ) $this->previous->setSlug($item->content);
 
                 $this->previous->conNext($item);
                 $this->previous->save();
@@ -146,7 +149,7 @@ class DynamicBase {
 
         $fields = $this->fields();
 
-        $this->models->map(
+        $this->dyn_models->map(
             function ($model) use ($fields) {
 
                 if (isset($fields[$model->name]['fields'])) {
@@ -164,23 +167,23 @@ class DynamicBase {
 
     private function getNewModels() 
     {
-        $this->dynHead = new DynHead;
-        $this->dynHead->type = class_basename(Str::lower(class_basename($this)));
+        $this->dyn_head = new DynHead;
+        $this->dyn_head->type = class_basename(Str::lower(class_basename($this)));
 
-        $this->models = $this->generateComponents();
+        $this->dyn_models = $this->generateComponents();
     }
 
     private function generateComponents() : Collection 
     {
         return $this->fields()->map(
-                function ($item, $key) {
+            function ($item, $key) {
 
-                    $model = $this->modelPath .  Str::ucfirst($item['type']);
-                    $model = (new $model);
-                    $model->name = $key;
+                $model = $this->modelPath .  Str::ucfirst($item['type']);
+                $model = (new $model);
+                $model->name = $key;
 
-                    return $model; 
-                }
-            );
+                return $model; 
+            }
+        );
     }
 }

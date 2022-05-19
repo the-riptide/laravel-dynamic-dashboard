@@ -3,24 +3,24 @@
 namespace TheRiptide\LaravelDynamicDashboard\Collections;
 
 use TheRiptide\LaravelDynamicDashboard\Models\DynHead;
-use TheRiptide\LaravelDynamicDashboard\Traits\Types;
+use TheRiptide\LaravelDynamicDashboard\Traits\GetType;
 
-class Dynamic 
+class DynamicCollection 
 {
-    use Types;
+    use GetType;
 
-    public $links;
+    private $items;
 
     public function __construct(string $type) 
     {
-        $this->links = DynHead::where('type', $type)->get()->map(
+        $this->items = DynHead::where('type', $type)->get()->map(
             fn ($head) => $this->getType($type, $head)
         );
     }
 
-    public function links() 
+    public function get() 
     {
-        return $this->links;
+        return $this->items;
 
     }
 }

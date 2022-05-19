@@ -9,7 +9,7 @@ class DynImage extends DynModel
     protected $table = 'dyn_strings';
     public $component = 'image';
  
-    public $rules = ['required|image', 'nullable|image'];    
+    public $rules = ['required|image', 'nullable'];    
 
     public function setContent($content) {
 

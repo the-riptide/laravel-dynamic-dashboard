@@ -3,11 +3,11 @@
 namespace TheRiptide\LaravelDynamicDashboard\Objects;
 
 use Illuminate\Support\Str;
-use TheRiptide\LaravelDynamicDashboard\Traits\Types;
+use TheRiptide\LaravelDynamicDashboard\Traits\GetType;
 
 class Menu
 {
-    use Types;
+    use GetType;
 
     public $items;
 

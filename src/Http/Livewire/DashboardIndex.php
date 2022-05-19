@@ -6,7 +6,7 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use TheRiptide\LaravelDynamicDashboard\Models\DynHead;
 use Livewire\Component;
 use TheRiptide\LaravelDynamicDashboard\Objects\Menu;
-use TheRiptide\LaravelDynamicDashboard\Collections\Dynamic;
+use TheRiptide\LaravelDynamicDashboard\Collections\DynamicCollection;
 use TheRiptide\LaravelDynamicDashboard\Security\Authorize;
 
 class DashboardIndex extends Component
@@ -26,7 +26,7 @@ class DashboardIndex extends Component
     public function render()
     {
 
-        $this->posts = (New Dynamic($this->type))->links();
+        $this->posts = (New DynamicCollection($this->type))->get();
         $this->canDelete = $this->posts->first()->canDelete();   
         $this->heads = $this->posts->first()->tableHeads();
 
