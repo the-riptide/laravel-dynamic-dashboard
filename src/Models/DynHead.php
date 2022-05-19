@@ -3,7 +3,6 @@
 namespace TheRiptide\LaravelDynamicDashboard\Models;
 
 use Illuminate\Support\Str;
-use TheRiptide\LaravelDynamicDashboard\Objects\Item;
 use TheRiptide\LaravelDynamicDashboard\Models\DynBase;
 
 class DynHead extends DynBase
@@ -16,11 +15,6 @@ class DynHead extends DynBase
         $this->slug = ($count === 0)
             ? $text
             : $text . '-' . $count;
-    }
-
-    public function links() : Item {
-
-        return new Item($this);
     }
 
     public function deleteAll() {

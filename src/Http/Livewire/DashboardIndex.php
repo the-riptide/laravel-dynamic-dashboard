@@ -6,7 +6,6 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use TheRiptide\LaravelDynamicDashboard\Models\DynHead;
 use Livewire\Component;
 use TheRiptide\LaravelDynamicDashboard\Objects\Menu;
-use TheRiptide\LaravelDynamicDashboard\Objects\Index;
 use TheRiptide\LaravelDynamicDashboard\Collections\Dynamic;
 use TheRiptide\LaravelDynamicDashboard\Security\Authorize;
 

@@ -4,7 +4,6 @@ namespace TheRiptide\LaravelDynamicDashboard\Http\Livewire;
 
 use Livewire\Component;
 use Livewire\WithFileUploads;
-use TheRiptide\LaravelDynamicDashboard\Objects\Manage;
 use TheRiptide\LaravelDynamicDashboard\Objects\Menu;
 use Illuminate\Support\Facades\Cache;
 use TheRiptide\LaravelDynamicDashboard\Security\Authorize;

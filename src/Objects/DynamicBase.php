@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Schema;
 use TheRiptide\LaravelDynamicDashboard\Traits\Types;
 use TheRiptide\LaravelDynamicDashboard\Models\DynHead;
 
-class BaseType {
+class DynamicBase {
 
     use Types;
 
@@ -56,8 +56,6 @@ class BaseType {
         return $this->$field;
     }
 
-
-
     public function models()
     {
         return $this->models;
@@ -85,7 +83,6 @@ class BaseType {
                     }
                 }
             );
-
     }
 
     private function prepare($head)
