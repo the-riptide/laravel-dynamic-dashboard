@@ -11,7 +11,7 @@ trait GetType {
 
     public function getType($type, DynHead|string $head = null) { 
 
-        $model = 'App\\' . config('dyndash.folder') . '\\' . Str::of($type)->ucfirst()->singular(); 
+        $model = 'App\\' . config('dyndash.folder') . '\\' . Str::of($type)->ucfirst(); 
 
         if (class_exists($model)) {
 
