@@ -133,7 +133,7 @@ class DynamicBase {
                 $item->setContent($contents[$item->name]);
                 $item->save();
                 
-                if (class_basename($this->previous) == 'dyn_head' ) $this->previous->setSlug($item->content);
+                if (class_basename($this->previous) == 'DynHead' ) $this->previous->setSlug($item->content);
 
                 $this->previous->conNext($item);
                 $this->previous->save();
