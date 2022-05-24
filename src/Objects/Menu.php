@@ -16,10 +16,35 @@ class Menu
 
         $this->items = $this->getAllTypes()
         ->filter(fn ($item) => $item !== 'Example' && $item !==  'example' )
-        ->mapWithKeys(
-            fn ($item) => [
-                $item => Str::of($item)->lower()
-            ]
-        );        
+        ->map(
+            function ($item) { return [
+                
+                    'name' => $item,
+                    'route' => 'dyndash.index',
+                    'parameter' =>Str::of($item)->lower()
+                
+            ];
+        }
+        )->concat(
+            collect(config('dyndash.menu_items'))->map(function ($item, $key) 
+            {
+                if (isset($item['route'])) {
+                    
+                    return [ 
+                        'name' => $key,
+                        'route' => $item['route'],
+                        'parameter' => $item['parameter'] ?? null,
+                    
+                    ];
+                }
+                else {
+                    return [
+                        
+                        'route' => $item,
+                        'name' => $key,
+                    ];
+                }
+            })
+        );
     }
 }

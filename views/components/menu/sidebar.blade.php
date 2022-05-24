@@ -14,10 +14,10 @@
                     hover:text-gray-800
                     transition-colors duration-150 mb-0 py-sm"
                 >
-                <a href="{{route('dyndash.index', [$item])}}" class="inline-flex items-center rounded w-full">
+                <a href="{{route($item['route'], [$item['parameter'] ?? null])}}" class="inline-flex items-center rounded w-full">
             
                     
-                    <span class="ml-4">{{ $key }}</span>
+                    <span class="ml-4">{{ $item['name'] }}</span>
                     
                 </a>
             
