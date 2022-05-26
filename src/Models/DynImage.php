@@ -51,7 +51,7 @@ class DynImage extends DynModel
         }
     }
 
-    private function grabConfigSizes($type) {
+    public function grabConfigSizes($type) {
 
         if (!null == config('dyndash.images.sizes.' . $type))
         {

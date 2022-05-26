@@ -4,6 +4,7 @@ namespace TheRiptide\LaravelDynamicDashboard;
 
 use Livewire\Livewire;
 use Illuminate\Support\ServiceProvider;
+use TheRiptide\LaravelDynamicDashboard\Tools\ManageImage;
 use TheRiptide\LaravelDynamicDashboard\Http\Livewire\DashboardIndex;
 use TheRiptide\LaravelDynamicDashboard\Http\Livewire\DashboardManage;
 
