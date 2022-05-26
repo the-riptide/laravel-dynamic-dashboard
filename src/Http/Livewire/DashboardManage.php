@@ -57,7 +57,7 @@ class DashboardManage extends Component
         // $dynamic = $this->getType($this->type, $this->identfier ?? null);
         $dynamic = Cache::get('dynamicObject');
 
-        $dynamic->save(
+        $dynamic->create(
             $dynamic->models()
             ->mapWithKeys(
                 fn ($item) => [$item->name => $this->{$item->name}] 

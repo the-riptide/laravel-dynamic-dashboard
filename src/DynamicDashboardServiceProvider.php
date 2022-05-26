@@ -31,6 +31,10 @@ class DynamicDashboardServiceProvider extends ServiceProvider
 
         Livewire::component('dashboard-manage', DashboardManage::class);
         Livewire::component('dashboard-index', DashboardIndex::class);
+
+        $this->app->singleton('ManageImage', function() {
+            return new ManageImage();
+        });
     }
 
     public function register() {

@@ -14,7 +14,7 @@ abstract class DynModel extends DynBase
     }
 
 
-    public function setContent($content)
+    public function setContent($content, $type)
     {
         $this->content = $content;
     }

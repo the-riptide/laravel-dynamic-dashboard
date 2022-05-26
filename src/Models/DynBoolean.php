@@ -9,7 +9,7 @@ class DynBoolean extends DynModel
     public $rules = 'nullable';
     public $component = 'checkbox';
 
-    public function setContent($content) {
+    public function setContent($content, $type) {
 
         $this->content = $content ? true : false;
     }

@@ -112,7 +112,6 @@ class DynamicBase {
         $objects->map(fn ($item) => $this->{$item->name} = $item->content);
     }
 
-
     public function index() 
     {
         return $this->fields()->map(fn ($attribute, $key) => $key);
@@ -123,14 +122,14 @@ class DynamicBase {
         return collect([]);
     }
 
-    public function save($contents) 
+    public function create($contents) 
     {
         $this->previous = $this->dyn_head;
         
         $this->dyn_models->map(
             function ($item) use ($contents) {
                 $item->unsetTempAttributes();
-                $item->setContent($contents[$item->name]);
+                $item->setContent($contents[$item->name], $this->dyn_head->type);
                 $item->save();
                 
                 if (class_basename($this->previous) == 'DynHead' ) $this->previous->setSlug($item->content);
