@@ -18,6 +18,7 @@ class DashboardManage extends Component
     public $type;
     public $identifier;
     private $previous;
+    public $disabled;
 
     public function mount($type, $id = null)
     {
@@ -41,6 +42,9 @@ class DashboardManage extends Component
 
     public function render()
     {
+
+        $this->disabled = false;
+
         return view('dyndash::manage', [
             'fields' => Cache::get('dynamicObject')->models(),
         ])->extends('dyndash::layout', ['menuItems' => (new Menu)->items ])
@@ -49,12 +53,12 @@ class DashboardManage extends Component
 
     public function save()
     {
+        $this->disabled = true;
 
         if (! (New Authorize)->canTakeAction()) return abort (403);
 
         $this->validate();
 
-        // $dynamic = $this->getType($this->type, $this->identfier ?? null);
         $dynamic = Cache::get('dynamicObject');
 
         $dynamic->create(

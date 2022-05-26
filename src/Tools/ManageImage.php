@@ -10,8 +10,6 @@ use Illuminate\Support\Facades\Storage;
 
 class ManageImage {
 
-
-
     public function prepSrcset ($model, $image = 'url') {
 
         $array = $this->createImageString($model, $image);
