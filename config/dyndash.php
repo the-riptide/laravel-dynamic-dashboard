@@ -20,13 +20,5 @@ return [
      * where you'd like to set the sizes of your image. These sizes will then automatically be created when an image is saved
      * and used when you use the 'srcset' helper. */
     'images' => [
-        'sizes' =>[
-            'article' => [
-                'smallest' => 500,
-                'small' => 800,
-                'smallish' => 1080,
-                'medium' => 1600,    
-            ]
-        ]
     ]
 ];
