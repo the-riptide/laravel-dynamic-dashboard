@@ -5,7 +5,7 @@ use TheRiptide\LaravelDynamicDashboard\Http\Livewire\DashboardIndex;
 use TheRiptide\LaravelDynamicDashboard\Http\Livewire\DashboardManage;
 use TheRiptide\LaravelDynamicDashboard\Middleware\AuthorizeDashboardMiddleware;
 
-Route::redirect('dashboard', config('dyndash.dash_home') ?? 'dashboard/article')->name('dyndash.home');
+Route::redirect('dashboard', config('dyndash.dash_home') ?? 'dashboard/article')->name('dyndash.home')->middleware(["web", AuthorizeDashboardMiddleware::class]);
 
 Route::get('/dashboard/create/{type}', DashboardManage::class)->name('dyndash.create')->middleware(['web', AuthorizeDashboardMiddleware::class]);
 Route::get('/dashboard/edit/{type}/{id}', DashboardManage::class)->name('dyndash.edit')->middleware(['web', AuthorizeDashboardMiddleware::class]);
