@@ -28,7 +28,7 @@ class Example {
             'title' => [
                 'type' => 'string',
 
-                'fields' => [
+                'proporties' => [
                     'placeholder' => 'Enter your title here...',
                 ],
             ],
@@ -45,7 +45,7 @@ class Example {
             'result' => [
                 'type' => 'dropdown',
 
-                'fields' => [
+                'proporties' => [
                     'items' => [
                         1 => 'one',
                         2 => 'two',

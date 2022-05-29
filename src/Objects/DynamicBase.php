@@ -151,9 +151,9 @@ class DynamicBase {
         $this->dyn_models->map(
             function ($model) use ($fields) {
 
-                if (isset($fields[$model->name]['fields'])) {
+                if (isset($fields[$model->name]['properties'])) {
 
-                    foreach ($fields[$model->name]['fields'] as $key => $field) $model->$key = $field; 
+                    foreach ($fields[$model->name]['properties'] as $key => $field) $model->$key = $field; 
                 }
                 
                 if ($model->model === null) $model->model = $model->name;

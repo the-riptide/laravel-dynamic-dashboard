@@ -20,5 +20,12 @@ return [
      * where you'd like to set the sizes of your image. These sizes will then automatically be created when an image is saved
      * and used when you use the 'srcset' helper. */
     'images' => [
-    ]
+    ],
+
+
+
+    /** set the url to the public folder in order to switch out the application mark in the top left */
+    'application-mark' => '',
+
+
 ];
