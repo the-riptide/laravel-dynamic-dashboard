@@ -1,14 +1,11 @@
 @props(['model'])
 
 <div>
-    <label class="block text-sm font-medium text-gray-700"> {{Str::ucfirst($model->title)}} </label>
+    <x-dyndash::input.label>{{ Str::ucfirst($model->title) }}</x-dyndash::input.label>
     <input
-        class="border border-gray-300 bg-white h-10 w-full px-5 pr-16 rounded-lg text-sm focus:outline-none focus:ring-indigo-900"
-        wire:model.defer="{{$model->name}}"
-        type="{{$model->type}}"
-        placeholder="{{$model->placeholder}}"
-    >
-    @error($model->model) 
-        <span>{{ $message }}</span> 
+        class="@error($model->model) border-red-500 @enderror h-10 w-full rounded-lg border border-gray-300 bg-white px-5 pr-16 text-sm focus:outline-none focus:ring-indigo-900"
+        wire:model.defer="{{ $model->name }}" type="{{ $model->type }}" placeholder="{{ $model->placeholder }}">
+    @error($model->model)
+        <span class="block pt-2 text-sm text-red-500">{{ $message }}</span>
     @enderror
 </div>
