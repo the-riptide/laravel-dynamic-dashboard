@@ -68,6 +68,6 @@ class DashboardManage extends Component
             )
         );
 
-        return redirect()->route('dyndash.index', [$this->type]);
+        return redirect()->route('dyndash.index', [$this->type])->with("status", $this->type . " saved successfully!");
     }
 }

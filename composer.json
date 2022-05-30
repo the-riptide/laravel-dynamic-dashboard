@@ -1,7 +1,7 @@
 {
     "name": "the-riptide/laravel-dynamic-dashboard",
     "description": "A way to generate a dynamic dashboard quickly and easily",
-    "type": "library",
+    "type": "project",
     "license": "MIT",
     "keywords": [
         "laravel",

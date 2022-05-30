@@ -40,7 +40,7 @@
                         Edit</x-dyndash::buttons.slot>
 
                         {{-- Delete --}}
-                        @if ($canDelete)
+                        @if (isset($canDelete) && $canDelete)
                             <x-dyndash::buttons.slot class="!py-1 !px-4 !text-sm" @click="
                                 isOpen = true;
                                 deleteId = {{ $post->id }} " :danger="1">
