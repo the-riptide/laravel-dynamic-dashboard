@@ -44,7 +44,7 @@ class Menu
                         
                         'route' => $item,
                         'name' => $key,
-                        'active' => request()->route()->getName() == $item['route'],
+                        'active' => request()->route()->getName() == $item,
 
                     ];
                 }
