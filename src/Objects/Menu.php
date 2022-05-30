@@ -3,6 +3,7 @@
 namespace TheRiptide\LaravelDynamicDashboard\Objects;
 
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Route;
 use TheRiptide\LaravelDynamicDashboard\Traits\GetType;
 
 class Menu
@@ -13,7 +14,6 @@ class Menu
 
     public function __construct() {
 
-
         $this->items = $this->getAllTypes()
         ->filter(fn ($item) => $item !== 'Example' && $item !==  'example' )
         ->map(
@@ -21,7 +21,8 @@ class Menu
                 
                     'name' => $item,
                     'route' => 'dyndash.index',
-                    'parameter' =>Str::of($item)->lower()
+                    'parameter' =>Str::of($item)->lower(),
+                    'active' => request()->routeIs('dyndash.*') && request()->route()->parameter('type') == Str::lower($item) ? true : false,
                 
             ];
         }
@@ -34,6 +35,7 @@ class Menu
                         'name' => $key,
                         'route' => $item['route'],
                         'parameter' => $item['parameter'] ?? null,
+                        'active' => request()->route()->getName() == $item['route'],
                     
                     ];
                 }
@@ -42,6 +44,8 @@ class Menu
                         
                         'route' => $item,
                         'name' => $key,
+                        'active' => request()->route()->getName() == $item['route'],
+
                     ];
                 }
             })
