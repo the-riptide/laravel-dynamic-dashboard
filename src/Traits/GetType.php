@@ -12,7 +12,7 @@ trait GetType {
 
     public function getType($type, DynHead|string $head = null) : DynamicBase { 
 
-        $model = 'App\\' . config('dyndash.folder') . '\\' . Str::of($type)->ucfirst(); 
+        $model = 'App\\' . config('dyndash.folder') . '\\' . Str::of($type)->camel()->ucfirst(); 
 
         if (class_exists($model)) {
 

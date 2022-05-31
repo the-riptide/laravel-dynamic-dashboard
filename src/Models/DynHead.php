@@ -7,6 +7,10 @@ use TheRiptide\LaravelDynamicDashboard\Models\DynBase;
 
 class DynHead extends DynBase
 {
+
+
+    protected $guarded = [];
+
     public function setSlug($text) {
 
         $text = Str::of($text)->words(4)->slug('-')->__toString();

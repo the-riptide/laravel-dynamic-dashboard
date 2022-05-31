@@ -5,7 +5,7 @@
 }">
 
     @section('title')
-        {{ Str::ucfirst($type) }}
+        {{ Str::of($type)->snake()->replace('_', ' ')->ucfirst()->plural() }}
     @endsection
 
     <x-dyndash::buttons.href-slot href="{{ route('dyndash.create', [$type]) }}" class="mb-12">

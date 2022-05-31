@@ -24,7 +24,10 @@ class DynamicBase {
     
     public function __construct(DynHead|string $head = null) {
 
-        $head
+        if (is_string($head)) $head = DynHead::firstWhere('slug', $head)->first();
+        
+        
+        $head && $head->type == class_basename($this)
             ? $this->prepare($head)
             : $this->getNewModels();
     }
@@ -145,7 +148,6 @@ class DynamicBase {
     /** adds exta fields like component names and placeholder texts */
     public function dashboardFields()
     {
-
         $fields = $this->fields();
 
         $this->dyn_models->map(
@@ -167,7 +169,7 @@ class DynamicBase {
     private function getNewModels() 
     {
         $this->dyn_head = new DynHead;
-        $this->dyn_head->type = class_basename(Str::lower(class_basename($this)));
+        $this->dyn_head->type = class_basename(class_basename($this));
 
         $this->dyn_models = $this->generateComponents();
     }

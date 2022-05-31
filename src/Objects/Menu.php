@@ -19,9 +19,9 @@ class Menu
         ->map(
             function ($item) { return [
                 
-                    'name' => $item,
+                    'name' => Str::of($item)->snake()->replace('_', ' ')->ucfirst()->plural(),
                     'route' => 'dyndash.index',
-                    'parameter' =>Str::of($item)->lower(),
+                    'parameter' =>Str::of($item)->snake(),
                     'active' => request()->routeIs('dyndash.*') && request()->route()->parameter('type') == Str::lower($item) ? true : false,
                 
             ];
@@ -32,7 +32,7 @@ class Menu
                 if (isset($item['route'])) {
                     
                     return [ 
-                        'name' => $key,
+                        'name' => Str::of($key)->snake()->replace('_', ' ')->ucfirst(),
                         'route' => $item['route'],
                         'parameter' => $item['parameter'] ?? null,
                         'active' => request()->route()->getName() == $item['route'],
@@ -43,7 +43,7 @@ class Menu
                     return [
                         
                         'route' => $item,
-                        'name' => $key,
+                        'name' => Str::of($key)->snake()->replace('_', ' ')->ucfirst(),
                         'active' => request()->route()->getName() == $item,
 
                     ];
