@@ -27,7 +27,7 @@ class DynamicBase {
         if (is_string($head)) $head = DynHead::firstWhere('slug', $head)->first();
         
         
-        $head && $head->type == Str::snake(class_basename($this))
+        $head && $head->type == class_basename($this)
             ? $this->prepare($head)
             : $this->getNewModels();
     }
@@ -169,7 +169,7 @@ class DynamicBase {
     private function getNewModels() 
     {
         $this->dyn_head = new DynHead;
-        $this->dyn_head->type = class_basename(class_basename($this));
+        $this->dyn_head->type = class_basename($this);
 
         $this->dyn_models = $this->generateComponents();
     }

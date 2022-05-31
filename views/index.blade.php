@@ -35,7 +35,7 @@
                 <x-dyndash::index.tbl-cell>
                     {{-- Edit --}}
                     <x-dyndash::buttons.href-slot
-                        href="{{ route('dyndash.edit', ['type' => Str::lower($post->type), 'id' => $post->id]) }}"
+                        href="{{ route('dyndash.edit', ['type' => Str::snake($post->type), 'id' => $post->id]) }}"
                         :small="true">
                         Edit</x-dyndash::buttons.slot>
 
