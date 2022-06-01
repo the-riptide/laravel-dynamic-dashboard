@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('slug')->nullable();
             $table->string('type');
             $table->foreignId('user_id')->nullable();
+            $table->unsignedBigInteger('order')->nullable();
             $table->timestamps();
         });
     }

@@ -19,6 +19,7 @@ class DynamicBase {
     private $dyn_models;
     private $dyn_head;
     private $canDelete = true;
+    private $order_by = 'updated_at';
 
     private $modelPath = 'TheRiptide\LaravelDynamicDashboard\Models\Dyn';
     
@@ -35,6 +36,11 @@ class DynamicBase {
     public function canDelete()
     {
         return $this->canDelete;
+    }
+
+    public function setOrder()
+    {
+        return $this->order_by;
     }
     
     public function tableHeads() : Collection

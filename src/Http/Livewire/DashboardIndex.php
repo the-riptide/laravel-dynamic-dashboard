@@ -29,9 +29,9 @@ class DashboardIndex extends Component
 
     public function render()
     {
-        $this->posts = (New DynamicCollection($this->type))->get();
-
+        
         $object = $this->getType($this->type);
+        $this->posts = (New DynamicCollection($this->type))->get()->sortBy($object->setOrder());
 
         $this->canDelete = $object->canDelete();   
         $this->heads = $object->tableHeads();
