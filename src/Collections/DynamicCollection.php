@@ -15,7 +15,7 @@ class DynamicCollection
     public function __construct(string $type) 
     {
         $type = Str::of($type)->camel()->ucfirst();
-        $this->items = DynHead::where('type', $type)->get()->map(
+        $this->items = DynHead::where('dyn_type', $type)->get()->map(
             fn ($head) => $this->getType($type, $head)
         );
     }

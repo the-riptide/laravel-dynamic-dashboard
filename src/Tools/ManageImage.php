@@ -33,19 +33,17 @@ class ManageImage {
     protected function addSrcset ($path, $name, $model) {
 
         $string = '';
-        foreach ((new DynImage)->grabConfigSizes($model->type) as $key => $value) {
+        foreach ((new DynImage)->grabConfigSizes($model->type()) as $key => $value) {
 
             $shortPath = $path . "/" . $key . "/"  . $name;
             
             if (Storage::drive('public')->exists($shortPath)) {
                 
-                $string = Str::of($string)->append(Storage::url($shortPath) . ' ' . $value . "w, ");
-                
+                $string = Str::of($string)->append(Storage::url($shortPath) . ' ' . $value . "w, ");   
             }
             else {
                 break;
             }
-
         }
         return $string;
     }

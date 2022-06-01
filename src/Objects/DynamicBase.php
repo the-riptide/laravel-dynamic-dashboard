@@ -20,6 +20,7 @@ class DynamicBase {
     private $dyn_head;
     private $canDelete = true;
     private $order_by = 'updated_at';
+    private $dyn_type;
 
     private $modelPath = 'TheRiptide\LaravelDynamicDashboard\Models\Dyn';
     
@@ -28,7 +29,7 @@ class DynamicBase {
         if (is_string($head)) $head = DynHead::firstWhere('slug', $head)->first();
         
         
-        $head && $head->type == class_basename($this)
+        $head && $head->dyn_type == class_basename($this)
             ? $this->prepare($head)
             : $this->getNewModels();
     }
@@ -73,6 +74,11 @@ class DynamicBase {
     public function head()
     {
         return $this->dyn_head;
+    }
+
+    public function type()
+    {
+        return $this->dyn_type;
     }
 
     public function rules()
@@ -138,7 +144,7 @@ class DynamicBase {
         $this->dyn_models->map(
             function ($item) use ($contents) {
                 $item->unsetTempAttributes();
-                $item->setContent($contents[$item->name], $this->dyn_head->type);
+                $item->setContent($contents[$item->name], $this->dyn_head->dyn_type);
                 $item->save();
                 
                 if (class_basename($this->previous) == 'DynHead' ) $this->previous->setSlug($item->content);
@@ -175,7 +181,7 @@ class DynamicBase {
     private function getNewModels() 
     {
         $this->dyn_head = new DynHead;
-        $this->dyn_head->type = class_basename($this);
+        $this->dyn_head->dyn_type = class_basename($this);
 
         $this->dyn_models = $this->generateComponents();
     }
