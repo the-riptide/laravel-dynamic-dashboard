@@ -41,7 +41,7 @@ class DashboardIndex extends Component
         return view('dyndash::index', [
             'field' => $this->heads,
 
-        ])->extends('dyndash::layout', [
+        ])->extends('dashcomp::layout', [
             'menuItems' => (new Menu)->items
         ])
             ->section('body');

@@ -47,7 +47,7 @@ class DashboardManage extends Component
 
         return view('dyndash::manage', [
             'fields' => Cache::get('dynamicObject')->models(),
-        ])->extends('dyndash::layout', ['menuItems' => (new Menu)->items ])
+        ])->extends('dashcomp::layout', ['menuItems' => (new Menu)->items ])
         ->section('body');
     }
 
