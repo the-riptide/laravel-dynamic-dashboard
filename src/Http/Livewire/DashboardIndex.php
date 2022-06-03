@@ -20,6 +20,7 @@ class DashboardIndex extends Component
     public $posts;
     public $type;
     public $canDelete;
+    public $canCreate;
 
     public function mount($type) 
     {
@@ -34,6 +35,7 @@ class DashboardIndex extends Component
         $this->posts = (New DynamicCollection($this->type))->get()->sortBy($object->setOrder());
 
         $this->canDelete = $object->canDelete();   
+        $this->canCreate = $object->canCreate();   
         $this->heads = $object->tableHeads();
 
         return view('dyndash::index', [

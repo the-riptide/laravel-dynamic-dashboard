@@ -18,16 +18,17 @@ class DynamicBase {
     
     private $dyn_models;
     private $dyn_head;
-    private $canDelete = true;
-    private $order_by = 'updated_at';
     private $dyn_type;
+
+    protected $canDelete = true;
+    protected $canCreate = true;
+    protected $order_by = 'updated_at';
 
     private $modelPath = 'TheRiptide\LaravelDynamicDashboard\Models\Dyn';
     
     public function __construct(DynHead|string $head = null) {
 
         if (is_string($head)) $head = DynHead::firstWhere('slug', $head)->first();
-        
         
         $head && $head->dyn_type == class_basename($this)
             ? $this->prepare($head)
@@ -37,6 +38,11 @@ class DynamicBase {
     public function canDelete()
     {
         return $this->canDelete;
+    }
+
+    public function canCreate()
+    {
+        return $this->canCreate;
     }
 
     public function setOrder()

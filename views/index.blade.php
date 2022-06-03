@@ -8,9 +8,11 @@
         {{ Str::of($type)->snake()->replace('_', ' ')->ucfirst()->plural() }}
     @endsection
 
-    <x-dyndash::buttons.href-slot href="{{ route('dyndash.create', [$type]) }}" class="mb-12">
-        Create new
-    </x-dyndash::buttons.href-slot>
+    @if($canCreate)
+        <x-dyndash::buttons.href-slot href="{{ route('dyndash.create', [$type]) }}" class="mb-12">
+            Create new
+        </x-dyndash::buttons.href-slot>
+    @endif
 
     <x-dyndash::index.table>
         <x-slot name="tableHead">
