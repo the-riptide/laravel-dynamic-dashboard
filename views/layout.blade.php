@@ -30,7 +30,7 @@
 
         <div class="divide-y divide-gray-200 bg-white shadow">
             {{-- Main Nav --}}
-            <x-dyndash::menu.menu :items="$menuItems" />
+            <x-dashcomp::menu.menu :items="$menuItems" />
 
             <!-- Page Header -->
             @if (View::hasSection('title'))

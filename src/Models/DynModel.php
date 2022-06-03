@@ -10,7 +10,7 @@ abstract class DynModel extends DynBase
 
     public function __construct() {
 
-        $this->component = 'dyndash::input.' . $this->component;
+        $this->component = 'dashcomp::input.' . $this->component;
     }
 
 

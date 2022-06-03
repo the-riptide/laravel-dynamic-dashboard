@@ -4,24 +4,25 @@
     deleteId: @entangle('deleteId'),
 }">
 
+    
     @section('title')
         {{ Str::of($type)->snake()->replace('_', ' ')->ucfirst()->plural() }}
     @endsection
 
     @if($canCreate)
-        <x-dyndash::buttons.href-slot href="{{ route('dyndash.create', [$type]) }}" class="mb-12">
+        <x-dashcomp::buttons.href-slot href="{{ route('dyndash.create', [$type]) }}" class="mb-12">
             Create new
-        </x-dyndash::buttons.href-slot>
+        </x-dashcomp::buttons.href-slot>
     @endif
 
-    <x-dyndash::index.table>
+    <x-dashcomp::index.table>
         <x-slot name="tableHead">
             <tr>
                 @foreach ($heads as $head)
-                    <x-dyndash::index.thead :title="$head" />
+                    <x-dashcomp::index.thead :title="$head" />
                 @endforeach
 
-                <x-dyndash::index.thead title="Actions" />
+                <x-dashcomp::index.thead title="Actions" />
 
             </tr>
         </x-slot>
@@ -29,32 +30,32 @@
         @foreach ($posts as $post)
             <tr>
                 @foreach ($heads as $head)
-                    <x-dyndash::index.tbl-cell>
+                    <x-dashcomp::index.tbl-cell>
                         {{ $post->setValue($head) }}
-                    </x-dyndash::index.tbl-cell>
+                    </x-dashcomp::index.tbl-cell>
                 @endforeach
 
-                <x-dyndash::index.tbl-cell>
+                <x-dashcomp::index.tbl-cell>
                     {{-- Edit --}}
-                    <x-dyndash::buttons.href-slot
+                    <x-dashcomp::buttons.href-slot
                         href="{{ route('dyndash.edit', ['type' => Str::snake($post->type()), 'id' => $post->id]) }}"
                         :small="true">
-                        Edit</x-dyndash::buttons.slot>
+                        Edit</x-dashcomp::buttons.slot>
 
                         {{-- Delete --}}
                         @if (isset($canDelete) && $canDelete)
-                            <x-dyndash::buttons.slot class="!py-1 !px-4 !text-sm" @click="
+                            <x-dashcomp::buttons.slot class="!py-1 !px-4 !text-sm" @click="
                                 isOpen = true;
                                 deleteId = {{ $post->id }} " :danger="1">
                                 Delete
-                            </x-dyndash::buttons.slot>
+                            </x-dashcomp::buttons.slot>
                         @endif
 
-                </x-dyndash::index.tbl-cell>
+                </x-dashcomp::index.tbl-cell>
 
             </tr>
         @endforeach
-    </x-dyndash::index.table>
+    </x-dashcomp::index.table>
 
 
     {{-- Modal --}}
@@ -69,8 +70,8 @@
 
             {{-- includes are set in the Modal Livewire component and located in the wide/modal/includes folder. --}}
 
-            <x-dyndash::modal.box @click.outside="isOpen = false" @keydown.escape.window="isOpen = false">
-                <x-dyndash::modal.content>
+            <x-dashcomp::modal.box @click.outside="isOpen = false" @keydown.escape.window="isOpen = false">
+                <x-dashcomp::modal.content>
 
                     <x-slot name="body">
                         <div
@@ -118,8 +119,8 @@
                         </div>
                     </x-slot name="footer">
 
-                </x-dyndash::modal.content>
-            </x-dyndash::modal.box>
+                </x-dashcomp::modal.content>
+            </x-dashcomp::modal.box>
 
         </div>
     </div>

@@ -1,7 +1,7 @@
 <div>
 
     <form wire:submit.prevent="save">
-        
+
         {{-- Header --}}
         @section('title')
             Manage {{ Str::of($type)->ucfirst()->replace('_', ' ') }}
@@ -16,9 +16,9 @@
 
         {{-- Buttons --}}
         <div class="pt-8">
-            <x-dyndash::buttons.slot wire:loading.class="cursor-not-allowed opacity-50" type="submit">
+            <x-dashcomp::buttons.slot wire:loading.class="cursor-not-allowed opacity-50" type="submit">
                 Save
-            </x-dyndash::buttons.slot>
+            </x-dashcomp::buttons.slot>
         </div>
 
     </form>
