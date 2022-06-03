@@ -22,8 +22,7 @@ class Menu
                     'name' => Str::of($item)->snake()->replace('_', ' ')->ucfirst()->plural(),
                     'route' => 'dyndash.index',
                     'parameter' =>Str::of($item)->snake(),
-                    'active' => request()->routeIs('dyndash.*') && request()->route()->parameter('type') == Str::lower($item) ? true : false,
-                
+                    'active' => request()->routeIs('dyndash.*') && request()->route()->parameter('type') == Str::snake($item) ? true : false,           
             ];
         }
         )->concat(
@@ -36,7 +35,6 @@ class Menu
                         'route' => $item['route'],
                         'parameter' => $item['parameter'] ?? null,
                         'active' => request()->route()->getName() == $item['route'],
-                    
                     ];
                 }
                 else {
@@ -45,7 +43,6 @@ class Menu
                         'route' => $item,
                         'name' => Str::of($key)->snake()->replace('_', ' ')->ucfirst(),
                         'active' => request()->route()->getName() == $item,
-
                     ];
                 }
             })
