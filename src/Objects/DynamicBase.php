@@ -150,7 +150,7 @@ class DynamicBase {
         $this->dyn_models->map(
             function ($item) use ($contents) {
                 $item->unsetTempAttributes();
-                $item->setContent($contents[$item->name], $this->dyn_head->dyn_type);
+                $item->setContent($contents[$item->name] ?? null, $this->dyn_head->dyn_type);
                 $item->save();
                 
                 if (class_basename($this->previous) == 'DynHead' ) $this->previous->setSlug($item->content);

@@ -16,7 +16,6 @@ class DynTime extends DynModel
         'content' => 'datetime',
     ];
 
-
     public function getContent()
     {
         return $this->content
