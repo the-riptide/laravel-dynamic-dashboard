@@ -47,7 +47,7 @@
                     <div
                         x-data="{
                             order : {{@json_encode($post->dyn_order)}}, 
-                            option : false,
+                            option : {{@json_encode($post->dyn_order)}},
                         }"
                     >
                         <x-dashcomp::buttons.slot 
@@ -63,10 +63,10 @@
                             x-cloak
                             @click.away="openOrder = false"
                         >
-                            <select x-model="option" @change="$wire.setOrderEvent(order, option), option = false">
+                            <select x-model="option" @change="$wire.setOrderEvent(order, option), option = order">
                                 @foreach ($posts->pluck('dyn_order') as $item) 
                                 
-                                    <option value="{{$item}}" @if($item == $post->dyn_order) selected @endif >{{$loop->index +1}}</option>
+                                    <option value="{{$item}}" @if($item == $post->dyn_order) @endif >{{$loop->index +1}}</option>
                                 @endforeach
                             </select>
                         </div>
