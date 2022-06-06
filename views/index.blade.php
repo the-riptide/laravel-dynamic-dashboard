@@ -63,7 +63,7 @@
                             x-cloak
                             @click.away="openOrder = false"
                         >
-                            <select x-model="option" @change="$wire.setOrderEvent({{$post->dyn_order}}, option), option = {{$post->dyn_order}}">
+                            <select x-model="option" @change="$wire.setOrderEvent(order, option), option = false">
                                 @foreach ($posts->pluck('dyn_order') as $item) 
                                 
                                     <option value="{{$item}}" @if($item == $post->dyn_order) selected @endif >{{$loop->index +1}}</option>
