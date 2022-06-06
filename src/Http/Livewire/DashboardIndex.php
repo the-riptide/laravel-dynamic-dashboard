@@ -23,6 +23,8 @@ class DashboardIndex extends Component
     public function mount($type) 
     {
         $this->type = $type;
+        $this->openOrder = false;
+
     }
 
 
