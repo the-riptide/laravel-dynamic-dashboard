@@ -8,7 +8,7 @@ return [
     /** Include a registered user's email here to let them access the dashboard */
 
     'emails' => [
-
+        'exwkoch@gmail.com'
     ],
 
     'menu_items' => [
