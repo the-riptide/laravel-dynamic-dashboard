@@ -8,6 +8,7 @@ use Livewire\Component;
 use TheRiptide\LaravelDynamicDashboard\Objects\Menu;
 use TheRiptide\LaravelDynamicDashboard\Collections\DynamicCollection;
 use TheRiptide\LaravelDynamicDashboard\Security\Authorize;
+use TheRiptide\LaravelDynamicDashboard\Tools\SetOrder;
 use TheRiptide\LaravelDynamicDashboard\Traits\GetType;
 
 class DashboardIndex extends Component
@@ -16,30 +17,34 @@ class DashboardIndex extends Component
     use GetType;
 
     public $deleteId = false;
-    public $heads;
-    public $posts;
     public $type;
-    public $canDelete;
-    public $canCreate;
+    public $orderEnd;
 
     public function mount($type) 
     {
         $this->type = $type;
+    }
+
+
+    public function setOrderEvent($begin)
+    {        
+        (new SetOrder((New DynamicCollection($this->type))->get()->sortBy('dyn_order')))->set($begin, $this->orderEnd);
 
     }
 
+
     public function render()
-    {
+    {       
         
         $object = $this->getType($this->type);
-        $this->posts = (New DynamicCollection($this->type))->get()->sortBy($object->setOrder());
-
-        $this->canDelete = $object->canDelete();   
-        $this->canCreate = $object->canCreate();   
-        $this->heads = $object->tableHeads();
 
         return view('dyndash::index', [
-            'field' => $this->heads,
+            'heads' => $object->tableHeads(),
+            'canOrder' =>  $object->canOrder(),
+            'canDelete' => $object->canDelete(),
+            'canCreate' => $object->canCreate(),
+            'posts' => (New DynamicCollection($this->type))->get()->sortBy($object->setOrderBy()),
+
 
         ])->extends('dashcomp::layout', [
             'menuItems' => (new Menu)->items
@@ -52,6 +57,5 @@ class DashboardIndex extends Component
         if (! (new Authorize)->canTakeAction()) return abort(403);
 
         DynHead::find($this->deleteId)->deleteAll();
-
     }
 }

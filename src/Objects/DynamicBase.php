@@ -2,6 +2,7 @@
 
 namespace TheRiptide\LaravelDynamicDashboard\Objects;
 
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Schema;
@@ -22,6 +23,7 @@ class DynamicBase {
 
     protected $canDelete = true;
     protected $canCreate = true;
+    protected $canOrder = true;
     protected $order_by = 'updated_at';
 
     private $modelPath = 'TheRiptide\LaravelDynamicDashboard\Models\Dyn';
@@ -45,9 +47,16 @@ class DynamicBase {
         return $this->canCreate;
     }
 
-    public function setOrder()
+    public function canOrder()
     {
-        return $this->order_by;
+        return $this->canOrder;
+    }
+
+    public function setOrderBy()
+    {
+        return $this->canOrder
+            ? 'dyn_order'
+            : $this->order_by;
     }
     
     public function tableHeads() : Collection

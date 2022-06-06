@@ -1,6 +1,6 @@
 {{-- this is a livewire view. For the livewire to work, the whole view must have a wrapping div. --}}
 <div x-data="{
-    isOpen: false,
+    openModal: false,
     deleteId: @entangle('deleteId'),
 }">
 
@@ -22,6 +22,10 @@
                     <x-dashcomp::index.thead :title="$head" />
                 @endforeach
 
+                @if(isset($canOrder) && $canOrder)
+                    <x-dashcomp::index.thead title="Set Order" />
+                @endif
+
                 <x-dashcomp::index.thead title="Actions" />
 
             </tr>
@@ -35,21 +39,67 @@
                     </x-dashcomp::index.tbl-cell>
                 @endforeach
 
+                @if (isset($canOrder) && $canOrder)
+                    <x-dashcomp::index.tbl-cell>
+
+                        {{-- Set Order --}}
+                        <div
+                            x-data="{openOrder : false}"
+                        >
+                            <x-dashcomp::buttons.slot 
+                                x-show="! openOrder"
+                                @click="openOrder = true"
+                                class="!py-1 !px-4 !text-sm" >
+                        
+                                {{$loop->index + 1}}
+                            </x-dashcomp::buttons.slot>
+
+                            <div
+                                x-show="openOrder"
+                                x-cloak
+                                @click.away="openOrder = false"
+                            >
+                                <select wire:model.defer="orderEnd" wire:change="setOrderEvent({{$post->dyn_order}}), $refresh">
+                                    @foreach ($posts->pluck('dyn_order') as $item) 
+                                        <option value="{{$item}}" {{$item == $post->dyn_order ? 'selected="selected"' : ''}}>{{$loop->index +1}}</option>
+                                    @endforeach
+                                </select>
+
+                                <x-dashcomp::buttons.slot 
+                                    class="!py-1 !px-4 !text-sm" >
+                            
+                                    Set
+                                </x-dashcomp::buttons.slot>
+
+                            </div>
+
+                        <div>
+
+
+                            
+                    </x-dashcomp::index.tbl-cell>
+                @endif
+
+
                 <x-dashcomp::index.tbl-cell>
                     {{-- Edit --}}
                     <x-dashcomp::buttons.href-slot
                         href="{{ route('dyndash.edit', ['type' => Str::snake($post->type()), 'id' => $post->id]) }}"
                         :small="true">
-                        Edit</x-dashcomp::buttons.slot>
+                        Edit
+                    </x-dashcomp::buttons.slot>
 
-                        {{-- Delete --}}
-                        @if (isset($canDelete) && $canDelete)
-                            <x-dashcomp::buttons.slot class="!py-1 !px-4 !text-sm" @click="
-                                isOpen = true;
-                                deleteId = {{ $post->id }} " :danger="1">
-                                Delete
-                            </x-dashcomp::buttons.slot>
-                        @endif
+
+                    
+                    {{-- Delete --}}
+                    @if (isset($canDelete) && $canDelete)
+                        <x-dashcomp::buttons.slot class="!py-1 !px-4 !text-sm" @click="
+                            openModal = true;
+                            deleteId = {{ $post->id }} " :danger="1">
+                            Delete
+                        </x-dashcomp::buttons.slot>
+                    @endif
+
 
                 </x-dashcomp::index.tbl-cell>
 
@@ -59,10 +109,10 @@
 
 
     {{-- Modal --}}
-    <div x-cloak x-show="isOpen" class="fixed inset-0 z-50 overflow-y-auto" aria-labelledby="modal-title" role="dialog"
+    <div x-cloak x-show="openModal" class="fixed inset-0 z-50 overflow-y-auto" aria-labelledby="modal-title" role="dialog"
         aria-modal="true">
         <div class="flex min-h-screen items-end justify-center px-4 pt-4 pb-20 text-center sm:block sm:p-0">
-            <div x-show="isOpen" x-transition.opacity class="fixed inset-0 bg-gray-500 bg-opacity-50 transition-opacity"
+            <div x-show="openModal" x-transition.opacity class="fixed inset-0 bg-gray-500 bg-opacity-50 transition-opacity"
                 aria-hidden="true"></div>
 
             <!-- This element is to trick the browser into centering the modal contents. -->
@@ -70,7 +120,7 @@
 
             {{-- includes are set in the Modal Livewire component and located in the wide/modal/includes folder. --}}
 
-            <x-dashcomp::modal.box @click.outside="isOpen = false" @keydown.escape.window="isOpen = false">
+            <x-dashcomp::modal.box @click.outside="openModal = false" @keydown.escape.window="openModal = false">
                 <x-dashcomp::modal.content>
 
                     <x-slot name="body">
@@ -104,7 +154,7 @@
 
                                     <button
                                         class="inline-flex justify-center border border-transparent bg-red-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
-                                        type="submit" x-ref="modalDeleteButton" @click="isOpen = false">
+                                        type="submit" x-ref="modalDeleteButton" @click="openModal = false">
                                         Delete
                                     </button>
                                 </div>
@@ -113,7 +163,7 @@
                             {{-- Cancel --}}
                             <button
                                 class="focus:ring-none inline-flex justify-center border border-transparent py-2 px-4 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none"
-                                type="button" @click="isOpen = false">
+                                type="button" @click="openModal = false">
                                 Cancel
                             </button>
                         </div>
