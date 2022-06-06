@@ -18,7 +18,7 @@ class DashboardIndex extends Component
 
     public $deleteId = false;
     public $type;
-    public $orderEnd;
+    public $openOrder;
 
     public function mount($type) 
     {
@@ -26,9 +26,13 @@ class DashboardIndex extends Component
     }
 
 
-    public function setOrderEvent($begin)
+    public function setOrderEvent($begin, $end)
     {        
-        (new SetOrder((New DynamicCollection($this->type))->get()->sortBy('dyn_order')))->set($begin, $this->orderEnd);
+
+        (new SetOrder((New DynamicCollection($this->type))->get()->sortBy('dyn_order')))->set($begin, $end);
+
+
+        $this->openOrder = false;
 
     }
 

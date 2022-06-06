@@ -2,6 +2,7 @@
 <div x-data="{
     openModal: false,
     deleteId: @entangle('deleteId'),
+    openOrder : @entangle('openOrder'),
 }">
 
     
@@ -44,33 +45,27 @@
 
                         {{-- Set Order --}}
                         <div
-                            x-data="{openOrder : false}"
+                            x-data="{order : {{@json_encode($post->dyn_order)}}}"
                         >
                             <x-dashcomp::buttons.slot 
-                                x-show="! openOrder"
-                                @click="openOrder = true"
+                                x-show=" openOrder != order"
+                                @click="openOrder = order"
                                 class="!py-1 !px-4 !text-sm" >
                         
                                 {{$loop->index + 1}}
                             </x-dashcomp::buttons.slot>
 
                             <div
-                                x-show="openOrder"
+                                x-show="openOrder == order"
                                 x-cloak
                                 @click.away="openOrder = false"
                             >
-                                <select wire:model.defer="orderEnd" wire:change="setOrderEvent({{$post->dyn_order}}), $refresh">
+                                <select wire:change="setOrderEvent({{$post->dyn_order}}, $event.target.value), $refresh">
                                     @foreach ($posts->pluck('dyn_order') as $item) 
-                                        <option value="{{$item}}" {{$item == $post->dyn_order ? 'selected="selected"' : ''}}>{{$loop->index +1}}</option>
+                                    
+                                        <option value="{{$item}}" @if($item == $post->dyn_order) selected="selected" @endif >{{$loop->index +1}}</option>
                                     @endforeach
                                 </select>
-
-                                <x-dashcomp::buttons.slot 
-                                    class="!py-1 !px-4 !text-sm" >
-                            
-                                    Set
-                                </x-dashcomp::buttons.slot>
-
                             </div>
 
                         <div>
