@@ -43,33 +43,35 @@
                 @if (isset($canOrder) && $canOrder)
                     <x-dashcomp::index.tbl-cell>
 
-                        {{-- Set Order --}}
+                    {{-- Set Order --}}
+                    <div
+                        x-data="{
+                            order : {{@json_encode($post->dyn_order)}}, 
+                            option : {{@json_encode($post->dyn_order)}},
+                        }"
+                    >
+                        <x-dashcomp::buttons.slot 
+                            x-show=" openOrder != order"
+                            @click="openOrder = order"
+                            class="!py-1 !px-4 !text-sm" >
+
+                            {{$loop->index + 1}}
+                        </x-dashcomp::buttons.slot>
+
                         <div
-                            x-data="{order : {{@json_encode($post->dyn_order)}}}"
+                            x-show="openOrder == order"
+                            x-cloak
+                            @click.away="openOrder = false"
                         >
-                            <x-dashcomp::buttons.slot 
-                                x-show=" openOrder != order"
-                                @click="openOrder = order"
-                                class="!py-1 !px-4 !text-sm" >
-                        
-                                {{$loop->index + 1}}
-                            </x-dashcomp::buttons.slot>
+                            <select x-model="option" @change="$wire.setOrderEvent(order, option), option = order">
+                                @foreach ($posts->pluck('dyn_order') as $item) 
+                                
+                                    <option value="{{$item}}" @if($item == $post->dyn_order) @endif >{{$loop->index +1}}</option>
+                                @endforeach
+                            </select>
+                        </div>
 
-                            <div
-                                x-show="openOrder == order"
-                                x-cloak
-                                @click.away="openOrder = false"
-                            >
-                                <select wire:change="setOrderEvent({{$post->dyn_order}}, $event.target.value), $refresh">
-                                    @foreach ($posts->pluck('dyn_order') as $item) 
-                                    
-                                        <option value="{{$item}}" @if($item == $post->dyn_order) selected="selected" @endif >{{$loop->index +1}}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-
-                        <div>
-
+                    <div>
 
                             
                     </x-dashcomp::index.tbl-cell>
