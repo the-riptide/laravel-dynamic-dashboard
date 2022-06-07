@@ -155,7 +155,7 @@ where 'type' is the name of your dashboard item.
 
 ### The Order-Setter
 
-Change the sort-order of items in a Model. It's automatically turned. If you can want it to not work for something, you can go to the Type and put the following like in the model file:
+Change the sort-order of items in a Model. It's automatically turned on. If you can want it to not work for something, you can go to the Type and put the following like in the model file:
 
 <code>protected $canOrder = false;</code>
 
