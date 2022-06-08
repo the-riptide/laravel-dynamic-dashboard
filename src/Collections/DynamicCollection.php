@@ -18,11 +18,19 @@ class DynamicCollection
         $this->items = DynHead::where('dyn_type', $type)->get()->map(
             fn ($head) => $this->getType($type, $head)
         );
+
+        if (count($this->items) > 0 ) $this->sort();
     }
 
     public function get() 
     {
         return $this->items;
+    }
+
+    private function sort()
+    {        
+        $this->items = $this->items->sortBy($this->items->first()->setOrderBy());
+
 
     }
 }
