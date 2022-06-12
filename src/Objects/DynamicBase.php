@@ -30,8 +30,12 @@ class DynamicBase {
     
     public function __construct(DynHead|string $head = null) {
 
-        if (is_string($head)) $head = DynHead::firstWhere('slug', $head)->first();
-        
+        if (is_string($head)) 
+        {
+        $head = is_numeric($head) 
+            ? DynHead::find($head)
+            : DynHead::firstWhere('slug', $head)->first();
+        }
         $head && $head->dyn_type == class_basename($this)
             ? $this->prepare($head)
             : $this->getNewModels();
