@@ -4,9 +4,9 @@ namespace TheRiptide\LaravelDynamicDashboard\Models;
 
 use TheRiptide\LaravelDynamicDashboard\Models\DynModel;
 
-class DynText extends DynModel
+class DynEditor extends DynModel
 {
-    public $component = 'text';
+    public $component = 'tinymce';
     public $rules = 'required|string';
 
 }
