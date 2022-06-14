@@ -9,4 +9,6 @@ class DynEditor extends DynModel
     public $component = 'tinymce';
     public $rules = 'required|string';
 
+    protected $table = 'dyn_texts';
+
 }
