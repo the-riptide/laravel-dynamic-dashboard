@@ -20,7 +20,8 @@ class DynImage extends DynModel
         else {
 
             $this->content = $content->store('/dynImages', 'public');
-            $this->createImageFormats($this->grabConfigSizes($type), 'dynImages', $this->content);
+            if ($content->extension() !== 'svg') 
+                $this->createImageFormats($this->grabConfigSizes($type), 'dynImages', $this->content);
         }    
     }
 
