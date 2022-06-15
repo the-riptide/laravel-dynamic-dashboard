@@ -6,13 +6,9 @@ use TheRiptide\LaravelDynamicDashboard\Models\DynBase;
 
 abstract class DynModel extends DynBase 
 {
-    public $rules = 'required';    
-
-    public function __construct() {
-
-        $this->component = 'dashcomp::input.' . $this->component;
-    }
-
+    
+    public $rules = 'required';  
+    public $component = 'dashcomp::input.simple';
 
     public function setContent($content, $type)
     {

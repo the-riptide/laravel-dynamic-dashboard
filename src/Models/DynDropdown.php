@@ -8,7 +8,7 @@ class DynDropdown extends DynModel
 {
 
     protected $table = 'dyn_strings';
-    public $component = 'dropdown';
+    public $component = 'dashcomp::input.dropdown';
 
 
     protected static function newFactory()

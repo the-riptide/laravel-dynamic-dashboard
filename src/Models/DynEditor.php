@@ -7,7 +7,7 @@ use TheRiptide\LaravelDynamicDashboard\Factories\DynEditorFactory;
 
 class DynEditor extends DynModel
 {
-    public $component = 'tinymce';
+    public $component = 'dashcomp::input.tinymce';
     public $rules = 'required|string';
 
     protected $table = 'dyn_texts';

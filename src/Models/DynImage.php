@@ -11,7 +11,7 @@ use TheRiptide\LaravelDynamicDashboard\Factories\DynImageFactory;
 class DynImage extends DynModel
 {
     protected $table = 'dyn_strings';
-    public $component = 'image';
+    public $component = 'dashcomp::input.image';
  
     public $rules = ['required|image', 'nullable'];    
 

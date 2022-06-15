@@ -7,7 +7,7 @@ use TheRiptide\LaravelDynamicDashboard\Factories\DynTextFactory;
 
 class DynText extends DynModel
 {
-    public $component = 'text';
+    public $component = 'dashcomp::input.text';
     public $rules = 'required|string';
 
 

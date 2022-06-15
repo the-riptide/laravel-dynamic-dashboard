@@ -9,7 +9,6 @@ class DynString extends DynModel
 {
 
     public $rules = 'required|string';
-    public $component = 'simple';
     
     protected static function newFactory()
     {

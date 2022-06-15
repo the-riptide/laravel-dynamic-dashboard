@@ -8,7 +8,7 @@ use TheRiptide\LaravelDynamicDashboard\Models\DynModel;
 class DynBoolean extends DynModel
 {
     public $rules = 'nullable';
-    public $component = 'checkbox';
+    public $component = 'dashcomp::input.checkbox';
 
     protected static function newFactory()
     {

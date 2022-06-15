@@ -8,7 +8,6 @@ use TheRiptide\LaravelDynamicDashboard\Factories\DynIntegerFactory;
 class DynInteger extends DynModel
 {
     public $rules = 'required|integer';
-    public $component = 'simple';
     public $type = 'number';
 
 
