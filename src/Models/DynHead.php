@@ -4,11 +4,16 @@ namespace TheRiptide\LaravelDynamicDashboard\Models;
 
 use Illuminate\Support\Str;
 use TheRiptide\LaravelDynamicDashboard\Models\DynBase;
+use TheRiptide\LaravelDynamicDashboard\Factories\DynHeadFactory;
 
 class DynHead extends DynBase
 {
-
     protected $guarded = [];
+
+    protected static function newFactory()
+    {
+        return DynHeadFactory::new();
+    }
 
     protected static function booted()
     {

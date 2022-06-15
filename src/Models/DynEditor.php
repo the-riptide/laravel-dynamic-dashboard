@@ -3,6 +3,7 @@
 namespace TheRiptide\LaravelDynamicDashboard\Models;
 
 use TheRiptide\LaravelDynamicDashboard\Models\DynModel;
+use TheRiptide\LaravelDynamicDashboard\Factories\DynEditorFactory;
 
 class DynEditor extends DynModel
 {
@@ -10,5 +11,11 @@ class DynEditor extends DynModel
     public $rules = 'required|string';
 
     protected $table = 'dyn_texts';
+
+
+    protected static function newFactory()
+    {
+        return DynEditorFactory::new();
+    }
 
 }

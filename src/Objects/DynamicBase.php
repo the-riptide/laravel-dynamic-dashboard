@@ -2,16 +2,16 @@
 
 namespace TheRiptide\LaravelDynamicDashboard\Objects;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Schema;
 use TheRiptide\LaravelDynamicDashboard\Models\DynHead;
 use TheRiptide\LaravelDynamicDashboard\Traits\GetType;
+use TheRiptide\LaravelDynamicDashboard\Tools\HasRelations;
 
 class DynamicBase {
 
-    use GetType;
+    use GetType, HasRelations;
 
     public $slug;
     public $user_id;

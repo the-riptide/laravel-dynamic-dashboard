@@ -11,6 +11,7 @@ abstract class DynBase extends Model
 {
     use HasFactory;
 
+
     private $path = 'TheRiptide\LaravelDynamicDashboard\Models\\'; 
 
     public function conNext($model) : Model {

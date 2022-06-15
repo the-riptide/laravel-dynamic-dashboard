@@ -16,6 +16,11 @@ class DynTime extends DynModel
         'content' => 'datetime',
     ];
 
+    protected static function newFactory()
+    {
+        return DynTimeFactory::new();
+    }
+
     public function getContent()
     {
         return $this->content

@@ -6,6 +6,7 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\File;
 use Intervention\Image\ImageManager;
 use TheRiptide\LaravelDynamicDashboard\Models\DynModel;
+use TheRiptide\LaravelDynamicDashboard\Factories\DynImageFactory;
 
 class DynImage extends DynModel
 {
@@ -13,6 +14,12 @@ class DynImage extends DynModel
     public $component = 'image';
  
     public $rules = ['required|image', 'nullable'];    
+
+
+    protected static function newFactory()
+    {
+        return DynImageFactory::new();
+    }
 
     public function setContent($content, $type) {
 

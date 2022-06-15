@@ -2,6 +2,7 @@
 
 namespace TheRiptide\LaravelDynamicDashboard\Models;
 
+use TheRiptide\LaravelDynamicDashboard\Factories\DynDateFactory;
 use TheRiptide\LaravelDynamicDashboard\Models\DynModel;
 
 class DynDate extends DynModel
@@ -14,6 +15,10 @@ class DynDate extends DynModel
         'content' => 'datetime',
     ];
 
+    protected static function newFactory()
+    {
+        return DynDateFactory::new();
+    }
 
     public function getContent()
     {
