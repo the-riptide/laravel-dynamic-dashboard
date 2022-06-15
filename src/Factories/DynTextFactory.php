@@ -20,7 +20,7 @@ class DynTextFactory extends Factory
     public function definition()
     {
         return [
-            'name' => $this->faker->words(2, true),
+            'name' => Str::snake($this->faker->words(2, true)),
             'content' => $this->faker->paragraph(),
         ];
     }
