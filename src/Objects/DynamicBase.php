@@ -26,7 +26,7 @@ class DynamicBase {
     protected $canOrder = true;
     protected $order_by = 'updated_at';
 
-    private $modelPath = 'TheRiptide\LaravelDynamicDashboard\Models\Dyn';
+    private $modelPath = 'TheRiptide\LaravelDynamicDashboard\Models\\';
     
     public function __construct(DynHead|string $head = null) {
 
@@ -174,6 +174,21 @@ class DynamicBase {
                 $this->previous = $item;
             }
         );
+
+        return $this;
+    }
+
+    public function factory()
+    {
+        $content = $this->dyn_models->mapWithKeys(
+            function ($item) {
+                $model = $this->modelPath .  class_basename($item);
+                $model = (new $model)->factory()->create();
+                return [$item->name => $model->content];
+            }
+        );
+
+        return $this->create($content);
     }
 
     /** adds exta fields like component names and placeholder texts */
@@ -210,7 +225,7 @@ class DynamicBase {
         return $this->fields()->map(
             function ($item, $key) {
 
-                $model = $this->modelPath .  Str::ucfirst($item['type']);
+                $model = $this->modelPath . 'Dyn' .  Str::ucfirst($item['type']);
                 $model = (new $model);
                 $model->name = $key;
 
