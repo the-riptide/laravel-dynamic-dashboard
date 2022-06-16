@@ -15,10 +15,10 @@ return new class extends Migration
     {
         Schema::create('dyn_relations', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('origin_id')->constrained();
+            $table->foreignId('origin_id');
             $table->string('origin_type');
             $table->string('link_type');
-            $table->foreignId('link_id')->constrained();
+            $table->foreignId('link_id');
             $table->timestamps();
         });
     }

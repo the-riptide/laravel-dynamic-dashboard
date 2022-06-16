@@ -1,8 +1,10 @@
 <?php
 
-namespace app\dyndash;
+namespace app\Dyndash;
 
-class Example {
+use TheRiptide\LaravelDynamicDashboard\Objects\DynamicBase;
+
+class Example extends DynamicBase {
 
     public function index() 
     {
@@ -14,7 +16,7 @@ class Example {
         ]);
     }
 
-    public function getShow($item) {
+    public function show($item) {
 
         return $item->show
             ? 'yes'
@@ -28,7 +30,7 @@ class Example {
             'title' => [
                 'type' => 'string',
 
-                'proporties' => [
+                'properties' => [
                     'placeholder' => 'Enter your title here...',
                 ],
             ],
@@ -45,7 +47,7 @@ class Example {
             'result' => [
                 'type' => 'dropdown',
 
-                'proporties' => [
+                'properties' => [
                     'items' => [
                         1 => 'one',
                         2 => 'two',

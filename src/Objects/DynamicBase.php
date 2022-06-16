@@ -156,8 +156,10 @@ class DynamicBase {
         return collect([]);
     }
 
-    public function create($contents) 
+    public function create($contents = []) 
     {
+        if (isset($this->contents)) $contents = $this->contents->merge($contents);
+
         $this->previous = $this->dyn_head;
         
         $this->dyn_models->map(
@@ -175,12 +177,14 @@ class DynamicBase {
             }
         );
 
+        $this->prepare($this->dyn_head);
+
         return $this;
     }
 
     public function factory()
     {
-        $content = $this->dyn_models->mapWithKeys(
+        $this->contents = $this->dyn_models->mapWithKeys(
             function ($item) {
                 $model = $this->modelPath .  class_basename($item);
                 $model = (new $model)->factory()->create();
@@ -188,7 +192,7 @@ class DynamicBase {
             }
         );
 
-        return $this->create($content);
+        return $this;
     }
 
     /** adds exta fields like component names and placeholder texts */
