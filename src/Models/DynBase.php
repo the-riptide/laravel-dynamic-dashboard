@@ -2,6 +2,7 @@
 
 namespace TheRiptide\LaravelDynamicDashboard\Models;
 
+use Illuminate\Support\Str;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Eloquent\Model;
@@ -12,7 +13,6 @@ abstract class DynBase extends Model
     use HasFactory;
 
     private $path = 'TheRiptide\LaravelDynamicDashboard\Models\\'; 
-
 
     public function conNext($model) : Model {
 
@@ -32,6 +32,17 @@ abstract class DynBase extends Model
 
         else return null;
     }
+
+    public function getType()
+    {
+        $model = $this->dyn_type == 'TestType'
+            ? 'TheRiptide\LaravelDynamicDashboard\Types\TestType'
+            : 'App\\' . config('dyndash.folder') . '\\' . Str::of($this->dyn_type)->camel()->ucfirst(); 
+
+        return new $model($this);           
+    }
+
+
 
     public function getAll(Collection|null $collection = null) : Collection {
 
