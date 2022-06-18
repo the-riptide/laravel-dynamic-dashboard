@@ -7,9 +7,7 @@ return [
 
     /** Include a registered user's email here to let them access the dashboard */
 
-    'emails' => [
-        'exwkoch@gmail.com'
-    ],
+    'emails' => [env('DASH_EMAIL')],
 
     'menu_items' => [
 
