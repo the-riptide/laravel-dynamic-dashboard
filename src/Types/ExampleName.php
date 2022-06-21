@@ -1,10 +1,10 @@
 <?php
 
-namespace app\Dyndash;
+namespace ExampleNameSpace;
 
 use TheRiptide\LaravelDynamicDashboard\Objects\DynamicBase;
 
-class Example extends DynamicBase {
+class ExampleName extends DynamicBase {
 
     public function index() 
     {

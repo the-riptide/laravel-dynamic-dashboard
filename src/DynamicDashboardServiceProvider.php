@@ -5,6 +5,7 @@ namespace TheRiptide\LaravelDynamicDashboard;
 use Livewire\Livewire;
 use Illuminate\Support\ServiceProvider;
 use TheRiptide\LaravelDynamicDashboard\Tools\ManageImage;
+use TheRiptide\LaravelDynamicDashboard\Commands\CreateTypeCommand;
 use TheRiptide\LaravelDynamicDashboard\Http\Livewire\DashboardIndex;
 use TheRiptide\LaravelDynamicDashboard\Http\Livewire\DashboardManage;
 
@@ -17,7 +18,6 @@ class DynamicDashboardServiceProvider extends ServiceProvider
 
         $this->publishes([
             __DIR__.'/../config/dyndash.php' => config_path('dyndash.php'),
-            __DIR__.'/Types/Example.php' => app_path('Dyndash/Example.php'),
         ], 'dynamic-dash-basic');
 
         $this->publishes([
@@ -33,6 +33,12 @@ class DynamicDashboardServiceProvider extends ServiceProvider
         $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
 
         $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
+
+        if ($this->app->runningInConsole()) {
+            $this->commands([
+                CreateTypeCommand::class,
+            ]);
+        }
 
 
         Livewire::component('dashboard-manage', DashboardManage::class);
