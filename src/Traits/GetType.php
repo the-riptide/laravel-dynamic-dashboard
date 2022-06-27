@@ -12,14 +12,10 @@ trait GetType {
 
     public function getType($type, DynHead|string $head = null) : DynamicBase { 
 
+        if ($type == 'TestType') return $this->setModel('TheRiptide\LaravelDynamicDashboard\Types\TestType', $head);
+
         $model = 'App\\' . config('dyndash.folder') . '\\' . Str::of($type)->camel()->ucfirst(); 
-
-        if (class_exists($model)) {
-
-            if(is_string($head)) $head = DynHead::Find($head);
-
-            return new $model($head);           
-        }
+        if (class_exists($model)) return $this->setModel($model, $head);
 
         throw new Exception("Not an existing type", 1);
     }
@@ -32,5 +28,14 @@ trait GetType {
         ->map(
             fn ($file) => Str::before($file->getBasename(), '.')  
         );
+    }
+
+    private function setModel($model, $head = null)
+    {
+        // if(is_string($head)) $head = DynHead::Find($head);
+
+        return $head 
+            ? (new $model)->find($head)
+            : (new $model)->new();
     }
 }

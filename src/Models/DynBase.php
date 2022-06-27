@@ -39,7 +39,9 @@ abstract class DynBase extends Model
             ? 'TheRiptide\LaravelDynamicDashboard\Types\TestType'
             : 'App\\' . config('dyndash.folder') . '\\' . Str::of($this->dyn_type)->camel()->ucfirst(); 
 
-        return new $model($this);           
+        return $this->exists() 
+            ? (new $model($this))->find($this->id)
+            : (new $model($this))->new();
     }
 
 

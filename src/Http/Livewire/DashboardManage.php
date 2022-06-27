@@ -26,11 +26,14 @@ class DashboardManage extends Component
         $this->identifer = $id;                
 
         $dynamic = $this->getType($type, $id);
+
         $dynamic = $dynamic->dashboardFields();
 
         $this->rules = $dynamic->rules();
         
-        $dynamic->models()->map(fn ($item) => $this->{$item->name} = $item->getContent());
+        $dynamic->models()->map(
+            fn ($item) => $this->{$item->name} = $item->getContent()
+        );
 
         Cache::put('dynamicObject', $dynamic);
     }
@@ -61,12 +64,12 @@ class DashboardManage extends Component
 
         $dynamic = Cache::get('dynamicObject');
 
-        $dynamic->create(
-            $dynamic->models()
-            ->mapWithKeys(
-                fn ($item) => [$item->name => $this->{$item->name}] 
-            )
+        $content = $dynamic->models()
+        ->mapWithKeys(
+            fn ($item) => [$item->name => $this->{$item->name}] 
         );
+
+        $dynamic->create($content);
 
         return redirect()->route('dyndash.index', [$this->type])->with("status", $this->type . " saved successfully!");
     }
