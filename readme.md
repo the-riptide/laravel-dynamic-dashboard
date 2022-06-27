@@ -38,7 +38,15 @@ Because we're using livewire, you'll need to add the folder App\Livewire to make
 
 A folder has been created in the App folder called Dyndash. Inside, there is one example file, which shows the basic layout of the file.
 
-To create a new dashboard item, create a new php file here and copy the code below:
+To create a new dashboard item, you can use the artisan command 
+
+<code>
+php artisan dyndash:create YourName
+</code>
+
+This will create a dyndash file in the folder specified in the dyndash config file. 
+
+Alternatively, you can create a new php file here and copy the code below:
 
 <code>
 
