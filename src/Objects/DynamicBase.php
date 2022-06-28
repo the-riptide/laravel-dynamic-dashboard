@@ -5,14 +5,15 @@ namespace TheRiptide\LaravelDynamicDashboard\Objects;
 use Illuminate\Support\Str;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Schema;
-use TheRiptide\LaravelDynamicDashboard\Collections\DynamicCollection;
 use TheRiptide\LaravelDynamicDashboard\Models\DynHead;
+use TheRiptide\LaravelDynamicDashboard\Tools\UseCache;
 use TheRiptide\LaravelDynamicDashboard\Traits\GetType;
 use TheRiptide\LaravelDynamicDashboard\Tools\HasRelations;
+use TheRiptide\LaravelDynamicDashboard\Collections\DynamicCollection;
 
 abstract class DynamicBase {
 
-    use GetType, HasRelations;
+    use GetType, HasRelations, UseCache;
 
     public $slug;
     public $user_id;
@@ -29,7 +30,7 @@ abstract class DynamicBase {
 
     private $modelPath = 'TheRiptide\LaravelDynamicDashboard\Models\\';
     
-    public function find(DynHead|string $head = null)
+    public function find(DynHead|string $head) : DynamicBase
     {
         if (is_string($head)) 
         {
@@ -38,16 +39,19 @@ abstract class DynamicBase {
                 : DynHead::firstWhere('slug', $head);
         }
 
+        if ($this->existCache($head->dyn_type, $head->id)) return $this->firstCache($head->dyn_type, $head->id);
+
         $this->dyn_models = $head->getAll();
         $this->dyn_head = $this->dyn_models->shift();
         $this->prepHead($this->dyn_head);
         $this->prepFields($this->dyn_models);
 
-        return $this;
+        $this->putCache($head->dyn_type, $head->id, $this);
 
+        return $this;
     }
 
-    public function new()
+    public function new() : DynamicBase
     {
         $this->getNewModels();
         $this->prepFields($this->dyn_models);
@@ -55,29 +59,27 @@ abstract class DynamicBase {
         return $this;
     }
 
-    public function get()
+    public function get() : Collection
     {
-        $this->getNewModels();
-
         return (new DynamicCollection(class_basename($this)))->get();
     }
 
-    public function canDelete()
+    public function canDelete() : bool
     {
         return $this->canDelete;
     }
 
-    public function canCreate()
+    public function canCreate() : bool
     {
         return $this->canCreate;
     }
 
-    public function canOrder()
+    public function canOrder() : bool
     {
         return $this->canOrder;
     }
 
-    public function setOrderBy()
+    public function setOrderBy() : string
     {
         return $this->canOrder
             ? 'dyn_order'
@@ -106,22 +108,22 @@ abstract class DynamicBase {
         return $this->$field;
     }
 
-    public function models()
+    public function models() : Collection
     {
         return $this->dyn_models;
     }
 
-    public function head()
+    public function head() : DynHead
     {
         return $this->dyn_head;
     }
 
-    public function type()
+    public function type() : string
     {
         return $this->dyn_type;
     }
 
-    public function rules()
+    public function rules() : Collection
     {
         return $this->dyn_models
             ->filter(
@@ -129,76 +131,44 @@ abstract class DynamicBase {
             )->mapWithKeys(
                 function ($item) {
                     
-                    if ($item->rules) {
-                            
-                        if (is_array($item->rules)) {
-                            return [$item->name => $item->exists ? $item->rules[1] : $item->rules[0] ];
-                        }    
-                        else { 
-                            return [$item->name => $item->rules];
-                        }                        
+                    if ($item->rules) 
+                    {                            
+                        if (is_array($item->rules)) return [$item->name => $item->exists ? $item->rules[1] : $item->rules[0] ];
+                        
+                        return [$item->name => $item->rules];
+                    
                     }
                 }
             );
     }
 
-    private function prepHead($head) {
-
-        Collect(Schema::getColumnListing($head->getTable()))->map(
-            function ($field) use ($head) {
-                if (! Str::startswith($field, 'next')) {
-                    
-                    $this->$field = $head->$field;
-                }        
-            }
-        );
-    }
-
-    private function prepFields($objects) {
-
-        $objects->map(fn ($item) => $this->{$item->name} = $item->content);
-    }
-
-    public function index() 
+    public function index()
     {
         return $this->fields()->map(fn ($attribute, $key) => $key);
     }
 
-    public function fields() 
+    public function fields()
     {
         return collect([]);
     }
 
-    public function create($contents = []) 
+    public function create($contents = []) : DynamicBase 
     {
-        if (isset($this->contents)) $contents = $this->contents->merge($contents);
-
         if (! $this->dyn_head || ! $this->dyn_head->exists()) $this->getNewModels();
 
         $this->previous = $this->dyn_head;
         
-        $this->dyn_models->map(
-            function ($item) use ($contents) {
-                $item->unsetTempAttributes();
-                $item->setContent($contents[$item->name] ?? null, $this->dyn_head->dyn_type);
-                $item->save();
-                
-                if (class_basename($this->previous) == 'DynHead' ) $this->previous->setSlug($item->content);
-
-                $this->previous->conNext($item);
-                $this->previous->save();
-
-                $this->previous = $item;
-            }
-        );
+        $this->toDataBase($contents);
 
         $this->prepHead($this->dyn_head);
         $this->prepFields($this->dyn_models);
 
+        $this->putCache($this->dyn_head->dyn_type, $this->dyn_head->id, $this);
+
         return $this;
     }
 
-    public function factory()
+    public function factory() : DynamicBase
     {
         $model = $this->new();
 
@@ -214,7 +184,7 @@ abstract class DynamicBase {
     }
 
     /** adds exta fields like component names and placeholder texts */
-    public function dashboardFields()
+    public function dashboardFields() : DynamicBase
     {
         $fields = $this->fields();
 
@@ -234,7 +204,45 @@ abstract class DynamicBase {
         return $this;
     }
 
-    private function getNewModels() 
+    private function prepHead($head) {
+
+        Collect(Schema::getColumnListing($head->getTable()))->map(
+            function ($field) use ($head) {
+                if (! Str::startswith($field, 'next')) {
+                    
+                    $this->$field = $head->$field;
+                }        
+            }
+        );
+    }
+
+    private function prepFields($objects) {
+
+        $objects->map(fn ($item) => $this->{$item->name} = $item->content);
+    }
+
+    private function toDataBase($contents)
+    {
+        if (isset($this->contents)) $contents = $this->contents->merge($contents);
+
+        $this->dyn_models->map(
+            function ($item) use ($contents) {
+
+                $item->unsetTempAttributes();
+                $item->setContent($contents[$item->name] ?? null, $this->dyn_head->dyn_type);
+                $item->save();
+                
+                if (class_basename($this->previous) == 'DynHead' ) $this->previous->setSlug($item->content);
+
+                $this->previous->conNext($item);
+                $this->previous->save();
+
+                $this->previous = $item;
+            }
+        );
+    }
+
+    private function getNewModels() : DynamicBase
     {
         $this->dyn_head = new DynHead;
         $this->dyn_head->dyn_type = class_basename($this);
