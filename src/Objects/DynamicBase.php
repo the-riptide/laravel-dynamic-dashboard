@@ -142,12 +142,12 @@ abstract class DynamicBase {
             );
     }
 
-    public function index()
+    public function index() : Collection
     {
         return $this->fields()->map(fn ($attribute, $key) => $key);
     }
 
-    public function fields()
+    public function fields() : Collection
     {
         return collect([]);
     }

@@ -2,18 +2,19 @@
 
 namespace TheRiptide\LaravelDynamicDashboard\Types; 
 
+use Illuminate\Support\Collection;
 use TheRiptide\LaravelDynamicDashboard\Objects\DynamicBase;
 
 class TestType extends DynamicBase 
 {
-    public function index() 
+    public function index() : Collection
     {
         return collect([
             'head',
         ]);
     }
 
-    public function fields()
+    public function fields() : Collection
     {
         return collect([
 

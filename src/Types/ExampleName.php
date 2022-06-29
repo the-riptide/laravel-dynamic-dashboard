@@ -2,6 +2,7 @@
 
 namespace ExampleNameSpace;
 
+use Illuminate\Support\Collection;
 use TheRiptide\LaravelDynamicDashboard\Objects\DynamicBase;
 
 class ExampleName extends DynamicBase {
@@ -10,7 +11,7 @@ class ExampleName extends DynamicBase {
      * If you're accessing a method, create a sub-array where you set 'function' to true. In this way, the function will be accessed and whatever is returned
      * will be displayed in that column. 
      */
-    public function index() 
+    public function index() : Collection
     {
         return collect([
             'title',
@@ -20,7 +21,8 @@ class ExampleName extends DynamicBase {
         ]);
     }
 
-    public function show($item) {
+    public function show($item) : string
+    {
 
         return $item->show
             ? 'yes'
@@ -34,7 +36,7 @@ class ExampleName extends DynamicBase {
      * See a full list of the options in the readme.
     */
 
-    public function fields()
+    public function fields() : Collection
     {
         return collect([
 
