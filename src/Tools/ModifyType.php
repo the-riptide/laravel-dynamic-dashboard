@@ -10,7 +10,6 @@ class ModifyType {
     use GetType;
 
     private $previous;
-    private $current;
 
     public function run($type = null)
     {
@@ -42,22 +41,38 @@ class ModifyType {
         {       
             if ($field && $model->name == $field['name'] && 'Dyn' . Str::ucfirst($field['type']) == $model->dyn_type)
             {
-                $previous = $model;
+                $this->previous = $model;
                 $field = $fields->shift();
             }
 
             else {
-                if (! isset($fields[$model->name])) $this->removeAndReconnect($previous, $model);
+                if (! isset($fields[$model->name])) $this->removeModel($previous, $model);
+                if (isset($fields[$model->name])) $previous = $this->insertModel($previous, $model, $field);
             }    
         }
     }
 
-    private function removeAndReconnect($last, $current)
+    private function removeModel($previous, $current)
     {
-        $last->next_model = $current->next_model;
-        $last->next_model_id = $current->next_model_id;
+        $previous->next_model = $current->next_model;
+        $previous->next_model_id = $current->next_model_id;
 
-        $last->save();
+        $previous->save();
         $current->delete();
+    }
+
+    private function insertModel($previous, $next, $field)
+    {
+        $current = 'TheRiptide\LaravelDynamicDashboard\Models\Dyn' . Str::ucfirst($field['type']);
+        $current = new $current;
+
+        $current->name = $field['name'];
+        $current->connext($next);
+        $current->save();
+
+        $previous->connext($current);
+        $previous->save();
+
+        return $current;
     }
 }
