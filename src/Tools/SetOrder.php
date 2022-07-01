@@ -29,8 +29,7 @@ class SetOrder
     }
 
     private function prepareOrderCollection($begin, $end, $order)
-    {
-        
+    {   
         if ($begin < $end) {
 
             $order->splice($order->search($end) +1);
@@ -45,8 +44,6 @@ class SetOrder
 
     private function adjustOrder($order) 
     {
-        
-
         $posts = DynHead::wherein('id', $this->posts->wherein('dyn_order', $order)->pluck('id'))->get();
 
         $used = [];
