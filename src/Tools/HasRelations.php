@@ -9,7 +9,7 @@ use TheRiptide\LaravelDynamicDashboard\Models\DynHead;
 use TheRiptide\LaravelDynamicDashboard\Models\DynRelation;
 use TheRiptide\LaravelDynamicDashboard\Objects\DynamicBase;
 
-trait hasRelations 
+trait HasRelations 
 {
 
     public function detach(DynamicBase|Collection $remove)
