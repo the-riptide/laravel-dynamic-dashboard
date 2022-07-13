@@ -43,9 +43,7 @@ abstract class DynBase extends Model
             ? (new $model($this))->find($this->id)
             : (new $model($this))->new();
     }
-
-
-
+    
     public function getAll(Collection|null $collection = null) : Collection {
 
         if (!$collection) $collection = collect([$this]);

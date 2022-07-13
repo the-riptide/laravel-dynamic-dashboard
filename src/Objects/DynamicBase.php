@@ -204,26 +204,26 @@ abstract class DynamicBase {
         return $this;
     }
 
-    public function modelsMatchFields()
-    {
-        $fields = $this->fields()->map(function ($item, $key) 
-        {
-            return [
-                'type' => 'Dyn' . Str::of($item['type'])->ucfirst(),
-            ];
-        });
+    // public function modelsMatchFields()
+    // {
+    //     $fields = $this->fields()->map(function ($item, $key) 
+    //     {
+    //         return [
+    //             'type' => 'Dyn' . Str::of($item['type'])->ucfirst(),
+    //         ];
+    //     });
 
-        $models = $this->models()->map(function ($item) 
-        {
-            return [
-                'type' => class_basename($item),
-            ];
-        });
+    //     $models = $this->models()->map(function ($item) 
+    //     {
+    //         return [
+    //             'type' => class_basename($item),
+    //         ];
+    //     });
 
-        foreach ($fields as $key => $item) if (!isset($models[$key]) || $models[$key] != $item) return false;
+    //     foreach ($fields as $key => $item) if (!isset($models[$key]) || $models[$key] != $item) return false;
         
-        return true;
-    }
+    //     return true;
+    // }
 
     private function prepHead($head) {
 
