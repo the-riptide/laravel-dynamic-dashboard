@@ -116,7 +116,6 @@ class ModifyType {
 
     private function threeConnext($first, $second, $third)
     {
-        dump('three');
         $first->connext($second);
         $first->save();
 
