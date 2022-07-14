@@ -10,6 +10,7 @@ class ModifyType {
     use GetType;
 
     private $models;
+    private $fields;
     private $type;
 
     public function run($type = null)
@@ -62,7 +63,14 @@ class ModifyType {
         {
             if (isset($moved[$field['name']]))
             {
-                $previous = $this->switchModel($previous, $models->shift(),  $moved[$field['name']]);
+                $previous = $this->switchModel(
+                    $previous, 
+                    [
+                        'next_model' => $model->next_model, 
+                        'next_model_id' => $model->next_model_id
+                    ],  
+                    $moved[$field['name']]
+                );
 
                 $model = $models->shift();
                 $moved->forget($field['name']);
@@ -70,10 +78,18 @@ class ModifyType {
             }
             elseif ($field && isset($this->fields[$model->name]) && $this->models->where('name', $field['name'])->first() != null) 
             {
-                $previous = $this->switchModel($previous, $model, $this->models->where('name', $field['name'])->first());
+                $previous = $this->switchModel(
+                    $previous, 
+                    [
+                        'next_model' => $model->next_model, 
+                        'next_model_id' => $model->next_model_id
+                    ], 
+                    $this->models->where('name', $field['name'])->first()
+                );
                 
                 $moved = $moved->merge([$model->name => $model]);
                 $field = $fields->shift();
+                $model = $models->shift();
             }
             elseif (isset($fields[$model->name])) 
             {
@@ -93,7 +109,7 @@ class ModifyType {
     private function switchModel($previous, $current, $replacement)
     {
         dump('switch');
-        $this->threeConnext($previous, $replacement, $current->getNext() );
+        $this->threeConnext($previous, $replacement, $current );
 
         return $replacement;
     }
@@ -103,9 +119,10 @@ class ModifyType {
         dump('three');
         $first->connext($second);
         $first->save();
-        $second->connext($third);
-        $second->save();
 
+        $second->next_model = $third['next_model'];
+        $second->next_model_id = $third['next_model_id'];
+        $second->save();
     }
 
     private function removeModel($previous, $current)
