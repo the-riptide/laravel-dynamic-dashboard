@@ -52,11 +52,8 @@ class ModifyType {
 
     private function compare($field, $model, $previous, $fields, $models, $moved)
     {        
-        dump('top');
-        // if ($field && $model->name == $field['name'] && 'Dyn' . Str::ucfirst($field['type']) == class_basename($model) && ! isset($moved[$field['name']]) && $field['type'] == class_basename($model))
         if ($field && $model->name == $field['name'] && 'Dyn' . Str::ucfirst($field['type']) == class_basename($model))
         {
-            dump('okay');
             $previous = $model;
             $field = $fields->shift();
             $model = $models->shift();
@@ -97,7 +94,6 @@ class ModifyType {
 
     private function changeModelType($field, $previous, $model)
     {
-        dump('switch type');
         $new = $this->createNewModel($field['type']);
 
         $new->name = $model->name;
@@ -114,7 +110,6 @@ class ModifyType {
 
     private function switchModelsCollection($models, $replacement, $current)
     {
-        dump('switch model collection');
 
         $models->splice($models->search(fn ($item) => $item->name == $current->name), 1, [$replacement->fresh()]);
 
@@ -123,8 +118,6 @@ class ModifyType {
 
     private function switchModel($previous, $current, $replacement)
     {
-        dump('switch');
-
         $previous->connext($replacement);
         $previous->save();
 
@@ -143,7 +136,6 @@ class ModifyType {
 
     private function removeModel($previous, $current)
     {
-        dump('remove');
         $previous->next_model = $current->next_model;
         $previous->next_model_id = $current->next_model_id;
 
@@ -160,9 +152,7 @@ class ModifyType {
     }
 
     private function insertModel($previous, $next, $field)
-    {
-        dump('insert');
-        
+    {        
         $current = $this->createNewModel($field['type']);
 
         $current->name = $field['name'];
