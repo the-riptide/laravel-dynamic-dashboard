@@ -51,7 +51,7 @@ class ModifyType {
     private function compare($field, $model, $previous, $fields, $models, $moved)
     {        
         dump('top');
-        if ($field && $model->name == $field['name'] && 'Dyn' . Str::ucfirst($field['type']) == class_basename($model) && ! isset($moved[$field['name']]))
+        if ($field && $model->name == $field['name'] && 'Dyn' . Str::ucfirst($field['type']) == class_basename($model) && ! isset($moved[$field['name']]) && $field['type'] == class_basename($model))
         {
             dump('okay');
             $previous = $model;
@@ -60,7 +60,14 @@ class ModifyType {
         }
         else
         {
-            if ($field && isset($fields[$model->name]) && $this->models->where('name', $field['name'])->first() != null) 
+            if ($field['name'] == $model->name && $field['type'] != class_basename($model))
+            {
+                $previous = $this->changeModelType($field, $previous, $model);
+
+                $field = $fields->shift();
+            }
+            
+            elseif ($field && isset($fields[$model->name]) && $this->models->where('name', $field['name'])->first() != null) 
             {
                 $previous = $this->switchModel(
                     $previous, $model, $this->models->where('name', $field['name'])->first(),
@@ -86,13 +93,28 @@ class ModifyType {
         if ($field != null && $model != null) $this->compare($field, $model, $previous, $fields, $models, $moved);
     }
 
+    private function changeModelType($field, $previous, $model)
+    {
+        $new = $this->createNewModel($field['type']);
+
+        $new->name = $model->name;
+        $new->content = $model->content;
+        $new->next_model = $model->next_model;
+        $new->next_model_id = $model->next_model_id;
+        $new->save();
+
+        $previous->connext($new);
+        $previous->save();
+
+        return $new;
+    }
+
     private function switchModelsCollection($models, $replacement, $current)
     {
         dump('switch model collection');
 
         $models->splice($models->search(fn ($item) => $item->name == $current->name), 1, [$replacement->fresh()]);
 
-        // dump($models->map(fn ($model) => $model->name));
         return $models;
     }
 
@@ -122,36 +144,6 @@ class ModifyType {
         $current->connext($this->findModelInFieldsArray($current, 'next'));
         $current->save();
 
-
-
-
-
-        // $nextReplacement = $replacement->getNext();
-        // $nextCurrent = $current->getNext();
-
-        // $previousReplacement = $this->models->where('next_model_id', $replacement->id)->where('next_model', class_basename($replacement))->first(); 
-        
-        // dump([
-        //     'previousCurrent' => $previousCurrent->name, 
-        //     'current' => $current->name, 
-        //     'nextCurrent' => $nextCurrent->name,
-        //     'previousReplacement' => $previousReplacement->name, 
-        //     'replacement' => $replacement->name, 
-        //     'nextReplacement' => $nextReplacement->name ?? null
-        // ]);
-
-        // $previousCurrent->connext($replacement);
-        // $previousCurrent->save();
-
-        // $replacement->connext($nextCurrent == $replacement ? $previousReplacement : $nextCurrent);
-        // $replacement->save();
-
-        // $previousReplacement->connext($previousReplacement == $current ? $nextReplacement : $current);
-        // $previousReplacement->save();
-
-        // $current->connext($nextReplacement);
-        // $current->save();
-
         return $replacement;
     }
 
@@ -176,11 +168,17 @@ class ModifyType {
         return $previous;
     }
 
+    private function createNewModel($type)
+    {
+        $current = 'TheRiptide\LaravelDynamicDashboard\Models\Dyn' . Str::ucfirst($type);
+        return new $current;
+    }
+
     private function insertModel($previous, $next, $field)
     {
         dump('insert');
-        $current = 'TheRiptide\LaravelDynamicDashboard\Models\Dyn' . Str::ucfirst($field['type']);
-        $current = new $current;
+        
+        $current = $this->createNewModel($field['type']);
 
         $current->name = $field['name'];
         $current->connext($next);
