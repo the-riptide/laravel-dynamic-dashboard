@@ -16,8 +16,8 @@ abstract class DynBase extends Model
 
     public function conNext($model) : Model {
 
-        $this->next_model = class_basename($model);
-        $this->next_model_id = $model->id;
+        $this->next_model = $model ? class_basename($model) : null;
+        $this->next_model_id = $model ? $model->id : null;
 
         return $this;
     }

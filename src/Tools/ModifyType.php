@@ -42,15 +42,14 @@ class ModifyType {
                 ] 
             ];
         });
-        $this->fields = $fields;
+
+        $this->fields = $fields->map(fn ($field) => $field['name'])->values();
 
         return [$item->head(), $models, $fields];
     }
 
     private function compare($field, $model, $previous, $fields, $models, $moved)
-    {
-        dump(['previous' => $previous->name, 'field' => $field['name'], 'model' => $model->name]);
-
+    {        
         dump('top');
         if ($field && $model->name == $field['name'] && 'Dyn' . Str::ucfirst($field['type']) == class_basename($model) && ! isset($moved[$field['name']]))
         {
@@ -59,35 +58,16 @@ class ModifyType {
             $field = $fields->shift();
             $model = $models->shift();
         }
-        else 
+        else
         {
-            if (isset($moved[$field['name']]))
+            if ($field && isset($fields[$model->name]) && $this->models->where('name', $field['name'])->first() != null) 
             {
                 $previous = $this->switchModel(
-                    $previous, 
-                    [
-                        'next_model' => $model->next_model, 
-                        'next_model_id' => $model->next_model_id
-                    ],  
-                    $moved[$field['name']]
+                    $previous, $model, $this->models->where('name', $field['name'])->first(),
                 );
 
-                $model = $models->shift();
-                $moved->forget($field['name']);
-                $field = $fields->shift();
-            }
-            elseif ($field && isset($this->fields[$model->name]) && $this->models->where('name', $field['name'])->first() != null) 
-            {
-                $previous = $this->switchModel(
-                    $previous, 
-                    [
-                        'next_model' => $model->next_model, 
-                        'next_model_id' => $model->next_model_id
-                    ], 
-                    $this->models->where('name', $field['name'])->first()
-                );
+                $models = $this->switchModelsCollection($models, $model, $previous);
                 
-                $moved = $moved->merge([$model->name => $model]);
                 $field = $fields->shift();
                 $model = $models->shift();
             }
@@ -106,10 +86,71 @@ class ModifyType {
         if ($field != null && $model != null) $this->compare($field, $model, $previous, $fields, $models, $moved);
     }
 
+    private function switchModelsCollection($models, $replacement, $current)
+    {
+        dump('switch model collection');
+
+        $models->splice($models->search(fn ($item) => $item->name == $current->name), 1, [$replacement->fresh()]);
+
+        // dump($models->map(fn ($model) => $model->name));
+        return $models;
+    }
+
+    private function findModelInFieldsArray($model, $next)
+    {
+        $index = $this->fields->search(fn ($item) => $model->name == $item) + ($next == 'next' ? + 1 : - 1);
+
+        return $index < $this->fields->count()
+            ? $this->models->where('name', $this->fields[$index])->first()
+            : null;
+    }
+
     private function switchModel($previous, $current, $replacement)
     {
         dump('switch');
-        $this->threeConnext($previous, $replacement, $current );
+
+        $previous->connext($replacement);
+        $previous->save();
+
+        $replacement->connext($this->findModelInFieldsArray($replacement, 'next'));
+        $replacement->save();
+
+        $previous = $this->findModelInFieldsArray($current, 'previous');
+        $previous->connext($current);
+        $previous->save();
+
+        $current->connext($this->findModelInFieldsArray($current, 'next'));
+        $current->save();
+
+
+
+
+
+        // $nextReplacement = $replacement->getNext();
+        // $nextCurrent = $current->getNext();
+
+        // $previousReplacement = $this->models->where('next_model_id', $replacement->id)->where('next_model', class_basename($replacement))->first(); 
+        
+        // dump([
+        //     'previousCurrent' => $previousCurrent->name, 
+        //     'current' => $current->name, 
+        //     'nextCurrent' => $nextCurrent->name,
+        //     'previousReplacement' => $previousReplacement->name, 
+        //     'replacement' => $replacement->name, 
+        //     'nextReplacement' => $nextReplacement->name ?? null
+        // ]);
+
+        // $previousCurrent->connext($replacement);
+        // $previousCurrent->save();
+
+        // $replacement->connext($nextCurrent == $replacement ? $previousReplacement : $nextCurrent);
+        // $replacement->save();
+
+        // $previousReplacement->connext($previousReplacement == $current ? $nextReplacement : $current);
+        // $previousReplacement->save();
+
+        // $current->connext($nextReplacement);
+        // $current->save();
 
         return $replacement;
     }
@@ -119,8 +160,7 @@ class ModifyType {
         $first->connext($second);
         $first->save();
 
-        $second->next_model = $third['next_model'];
-        $second->next_model_id = $third['next_model_id'];
+        $second->connext($third);
         $second->save();
     }
 
