@@ -7,7 +7,7 @@ use TheRiptide\LaravelDynamicDashboard\Traits\GetType;
 
 class ModifyType {
 
-    use GetType;
+    use GetType, UseCache;
 
     private $models;
     private $fields;
@@ -27,6 +27,8 @@ class ModifyType {
         [$previous, $models, $fields] = $this->setup($item);
 
         $this->compare($fields->shift(), $models->shift(), $previous, $fields, $models, collect());
+
+        $this->putCache($item->head()->dyn_type, $item->head()->id, $item);
     }
 
     private function setup($item)
@@ -51,7 +53,8 @@ class ModifyType {
     private function compare($field, $model, $previous, $fields, $models, $moved)
     {        
         dump('top');
-        if ($field && $model->name == $field['name'] && 'Dyn' . Str::ucfirst($field['type']) == class_basename($model) && ! isset($moved[$field['name']]) && $field['type'] == class_basename($model))
+        // if ($field && $model->name == $field['name'] && 'Dyn' . Str::ucfirst($field['type']) == class_basename($model) && ! isset($moved[$field['name']]) && $field['type'] == class_basename($model))
+        if ($field && $model->name == $field['name'] && 'Dyn' . Str::ucfirst($field['type']) == class_basename($model))
         {
             dump('okay');
             $previous = $model;
@@ -59,15 +62,8 @@ class ModifyType {
             $model = $models->shift();
         }
         else
-        {
-            if ($field['name'] == $model->name && $field['type'] != class_basename($model))
-            {
-                $previous = $this->changeModelType($field, $previous, $model);
-
-                $field = $fields->shift();
-            }
-            
-            elseif ($field && isset($fields[$model->name]) && $this->models->where('name', $field['name'])->first() != null) 
+        {            
+            if ($field && isset($fields[$model->name]) && $this->models->where('name', $field['name'])->first() != null) 
             {
                 $previous = $this->switchModel(
                     $previous, $model, $this->models->where('name', $field['name'])->first(),
@@ -77,6 +73,12 @@ class ModifyType {
                 
                 $field = $fields->shift();
                 $model = $models->shift();
+            }
+            elseif ($field['name'] == $model->name && $field['type'] != class_basename($model))
+            {
+                $previous = $this->changeModelType($field, $previous, $model);
+
+                $field = $fields->shift();
             }
             elseif (isset($fields[$model->name])) 
             {
@@ -95,6 +97,7 @@ class ModifyType {
 
     private function changeModelType($field, $previous, $model)
     {
+        dump('switch type');
         $new = $this->createNewModel($field['type']);
 
         $new->name = $model->name;
@@ -118,15 +121,6 @@ class ModifyType {
         return $models;
     }
 
-    private function findModelInFieldsArray($model, $next)
-    {
-        $index = $this->fields->search(fn ($item) => $model->name == $item) + ($next == 'next' ? + 1 : - 1);
-
-        return $index < $this->fields->count()
-            ? $this->models->where('name', $this->fields[$index])->first()
-            : null;
-    }
-
     private function switchModel($previous, $current, $replacement)
     {
         dump('switch');
@@ -145,15 +139,6 @@ class ModifyType {
         $current->save();
 
         return $replacement;
-    }
-
-    private function threeConnext($first, $second, $third)
-    {
-        $first->connext($second);
-        $first->save();
-
-        $second->connext($third);
-        $second->save();
     }
 
     private function removeModel($previous, $current)
@@ -188,5 +173,14 @@ class ModifyType {
         $previous->save();
 
         return $current;
+    }
+
+    private function findModelInFieldsArray($model, $next)
+    {
+        $index = $this->fields->search(fn ($item) => $model->name == $item) + ($next == 'next' ? + 1 : - 1);
+
+        return $index < $this->fields->count()
+            ? $this->models->where('name', $this->fields[$index])->first()
+            : null;
     }
 }
