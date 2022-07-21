@@ -12,11 +12,11 @@ class DynamicCollection
 
     private $items;
 
-    public function __construct(string $type) 
+    public function __construct(string $type, $getCache = true) 
     {
         $type = Str::of($type)->camel()->ucfirst();
         $this->items = DynHead::where('dyn_type', $type)->get()->map(
-            fn ($head) => $this->getType($type, $head)
+            fn ($head) => $this->getType($type, $head, $getCache)
         );
 
         if (count($this->items) > 0 ) $this->sort();

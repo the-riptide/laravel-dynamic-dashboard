@@ -7,6 +7,8 @@ use TheRiptide\LaravelDynamicDashboard\Models\DynHead;
 
 class SetOrder 
 {
+    use UseCache;
+
     private $posts;
 
     public function __construct($posts) 
@@ -24,7 +26,9 @@ class SetOrder
                 $this->posts->pluck('dyn_order')->sort()
             );
 
-            $this->adjustOrder($order);
+            $this->adjustOrder($order)
+                ->map(fn ($post) => $post->putInCache());
+
         }
     }
 
@@ -48,12 +52,16 @@ class SetOrder
 
         $used = [];
         for ($x = 0; $x < $order->count(); $x ++) {
+            
             $post = $posts->whereNotIn('id', $used)->firstWhere('dyn_order', $order[$x]);
             $used[] = $post->id;
 
             isset($order[$x +1]) 
                 ? $post->update(['dyn_order' => $order[$x + 1]])                        
                 : $post->update(['dyn_order' => $order[0]]);
+            
         }        
+
+        return $this->posts->wherein('id', $used);
     }
 }

@@ -30,7 +30,7 @@ abstract class DynamicBase {
 
     private $modelPath = 'TheRiptide\LaravelDynamicDashboard\Models\\';
     
-    public function find(DynHead|string $head) : DynamicBase
+    public function find(DynHead|string $head, $getCache = true) : DynamicBase
     {
         if (is_string($head)) 
         {
@@ -39,16 +39,22 @@ abstract class DynamicBase {
                 : DynHead::firstWhere('slug', $head);
         }
 
-        if ($this->existCache($head->dyn_type, $head->id)) return $this->firstCache($head->dyn_type, $head->id);
+
+        if ($getCache && $this->existCache($head->dyn_type, $head->id)) return $this->firstCache($head->dyn_type, $head->id);
 
         $this->dyn_models = $head->getAll();
         $this->dyn_head = $this->dyn_models->shift();
         $this->prepHead($this->dyn_head);
         $this->prepFields($this->dyn_models);
 
-        $this->putCache($head->dyn_type, $head->id, $this);
+        $this->putInCache();
 
         return $this;
+    }
+
+    public function putInCache() {
+
+        $this->putCache($this->dyn_head->dyn_type, $this->dyn_head->id, $this);
     }
 
     public function new() : DynamicBase
@@ -59,9 +65,9 @@ abstract class DynamicBase {
         return $this;
     }
 
-    public function get() : Collection
+    public function get($getCache = true) : Collection
     {
-        return (new DynamicCollection(class_basename($this)))->get();
+        return (new DynamicCollection(class_basename($this), $getCache))->get();
     }
 
     public function canDelete() : bool
@@ -163,7 +169,7 @@ abstract class DynamicBase {
         $this->prepHead($this->dyn_head);
         $this->prepFields($this->dyn_models);
 
-        $this->putCache($this->dyn_head->dyn_type, $this->dyn_head->id, $this);
+        $this->putInCache();
 
         return $this;
     }

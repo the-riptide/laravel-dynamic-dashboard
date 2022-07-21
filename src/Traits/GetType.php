@@ -10,12 +10,12 @@ use TheRiptide\LaravelDynamicDashboard\Objects\DynamicBase;
 
 trait GetType {
 
-    public function getType($type, DynHead|string $head = null) : DynamicBase { 
+    public function getType($type, DynHead|string $head = null, $getCache = true) : DynamicBase { 
 
         if ($type == 'TestType') return $this->setModel('TheRiptide\LaravelDynamicDashboard\Types\TestType', $head);
 
         $model = 'App\\' . config('dyndash.folder') . '\\' . Str::of($type)->camel()->ucfirst(); 
-        if (class_exists($model)) return $this->setModel($model, $head);
+        if (class_exists($model)) return $this->setModel($model, $head, $getCache);
 
         throw new Exception("Not an existing type", 1);
     }
@@ -30,12 +30,12 @@ trait GetType {
         );
     }
 
-    private function setModel($model, $head = null)
+    private function setModel($model, $head = null, $getCache = true)
     {
         // if(is_string($head)) $head = DynHead::Find($head);
 
         return $head 
-            ? (new $model)->find($head)
+            ? (new $model)->find($head, $getCache)
             : (new $model)->new();
     }
 }

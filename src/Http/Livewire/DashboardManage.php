@@ -25,7 +25,7 @@ class DashboardManage extends Component
         $this->type = $type;
         $this->identifer = $id;                
 
-        $dynamic = $this->getType($type, $id);
+        $dynamic = $this->getType($type, $id, false);
 
         $dynamic = $dynamic->dashboardFields();
 

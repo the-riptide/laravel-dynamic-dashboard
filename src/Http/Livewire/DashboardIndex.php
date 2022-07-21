@@ -26,6 +26,7 @@ class DashboardIndex extends Component
 
     public function setOrderEvent($begin, $end)
     {        
+    
         (new SetOrder($this->GetType($this->type)->get()))->set($begin, $end);
 
         // (new SetOrder((New DynamicCollection($this->type))->get()))->set($begin, $end);
@@ -42,7 +43,7 @@ class DashboardIndex extends Component
             'canOrder' =>  $object->canOrder(),
             'canDelete' => $object->canDelete(),
             'canCreate' => $object->canCreate(),
-            'posts' => $this->GetType($this->type)->get(),
+            'posts' => $this->GetType($this->type, null, false)->get(false),
 
         ])->extends('dashcomp::layout', [
             'menuItems' => (new Menu)->items
