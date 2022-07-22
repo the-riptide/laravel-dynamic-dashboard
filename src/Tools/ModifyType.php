@@ -16,8 +16,12 @@ class ModifyType {
     public function run($type = null)
     {
         $this->getType($type)
-            ->get()
-            ->map( fn ($item) => $this->fix($item) );
+            ->get(false)
+            ->map( function ($item) { 
+                $this->fix($item); 
+            });
+
+        
     }
 
     private function fix($item)
@@ -28,7 +32,8 @@ class ModifyType {
 
         $this->compare($fields->shift(), $models->shift(), $previous, $fields, $models, collect());
 
-        $this->putCache($item->head()->dyn_type, $item->head()->id, $item);
+        $this->putCache($item->head()->dyn_type, $item->head()->id, $item->fresh());
+
     }
 
     private function setup($item)
