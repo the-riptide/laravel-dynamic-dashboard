@@ -25,11 +25,8 @@ class DashboardIndex extends Component
     }
 
     public function setOrderEvent($begin, $end)
-    {        
-    
+    {            
         (new SetOrder($this->GetType($this->type)->get()))->set($begin, $end);
-
-        // (new SetOrder((New DynamicCollection($this->type))->get()))->set($begin, $end);
 
         $this->openOrder = false;
     }
