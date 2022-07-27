@@ -17,16 +17,20 @@ class Menu
         $this->items = $this->getAllTypes()
         ->filter(fn ($item) => $item !== 'Example' && $item !==  'example' )
         ->map(
-            function ($item) { return [
+            function ($item) 
+            { 
+                return [
                 
-                    'name' => Str::of($item)->snake()->replace('_', ' ')->ucfirst()->plural(),
+                    'name' => config('dyndash.menu.names.' . $item) != null 
+                        ? config('dyndash.menu.names.'. $item) 
+                        : Str::of($item)->snake()->replace('_', ' ')->ucfirst()->plural(),
                     'route' => 'dyndash.index',
                     'parameter' =>Str::of($item)->snake(),
                     'active' => request()->routeIs('dyndash.*') && request()->route()->parameter('type') == Str::snake($item) ? true : false,           
-            ];
-        }
+                ];
+            }
         )->concat(
-            collect(config('dyndash.menu_items'))->map(function ($item, $key) 
+            collect(config('dyndash.menu.items'))->map(function ($item, $key) 
             {
                 if (isset($item['route'])) {
                     
