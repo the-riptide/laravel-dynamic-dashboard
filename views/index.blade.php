@@ -19,7 +19,7 @@
     <x-dashcomp::index.table>
         <x-slot name="tableHead">
             <tr>
-                @foreach ($heads as $head)
+                @foreach ($heads as $head => $value)
                     <x-dashcomp::index.thead :title="$head" />
                 @endforeach
 
@@ -34,9 +34,9 @@
 
         @foreach ($posts as $post)
             <tr>
-                @foreach ($heads as $head)
+                @foreach ($heads as $head => $value)
                     <x-dashcomp::index.tbl-cell>
-                        {{ $post->setValue($head) }}
+                        {{ $post->setValue($value) }}
                     </x-dashcomp::index.tbl-cell>
                 @endforeach
 

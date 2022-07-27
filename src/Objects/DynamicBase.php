@@ -99,12 +99,12 @@ abstract class DynamicBase {
     
     public function tableHeads() : Collection
     {
-        return $this->index()->map(
-            function($item, $key) {
+        return $this->index()->mapWithKeys(
+            function($item, $itemKey) {
 
-                if (is_array($item) || $item instanceof Collection) return $key;
-                
-                return $item;
+                if (is_array($item) || $item instanceof Collection) return [$this->getTableHead($itemKey) => $itemKey];
+
+                return [$this->getTableHead($item) => $item];
             }
         )->filter();
     }
@@ -275,5 +275,12 @@ abstract class DynamicBase {
                 return $model; 
             }
         );
+    }
+
+    private function getTableHead($key)
+    {
+        return isset($this->fields()[$key]['properties']['title'])
+            ? $this->fields()[$key]['properties']['title']
+            : $key;
     }
 }
