@@ -14,7 +14,7 @@ class CreateType {
         File::put(
             'app/' . (config('dyndash.folder') ?? 'DynDash') . '/' . $type . '.php', 
             Str::of(File::get($origin))
-                ->replace('ExampleNameSpace', 'app\\' . (config('dyndash.folder') ?? 'DynDash'))
+                ->replace('ExampleNameSpace', 'App\\' . (config('dyndash.folder') ?? 'DynDash'))
                 ->replace('ExampleName', $type)
                 ->__toString()
         );
