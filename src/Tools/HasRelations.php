@@ -54,12 +54,12 @@ trait HasRelations
             ->where(
                 function($query) use ($type) {
                     $query->where('link_id', $this->id)
-                        ->where('link_type', $type);
+                        ->where('origin_type', $type);
                 }
             )->orwhere(
                 function($query) use ($type){
                     $query->where('origin_id', $this->id)
-                        ->where('origin_type', $type);
+                        ->where('link_type', $type);
                 }
             )->get()
             ->map(function ($item){
@@ -68,8 +68,10 @@ trait HasRelations
                     ? $item->link_id
                     : $item->origin_id;  
             });
-
+            
         return DynHead::wherein('id', $ids)->get()
-            ->map(fn ($head) => $head->getType());
+        ->map(
+            fn ($head) => $head->getType()
+        );
     }
 }
