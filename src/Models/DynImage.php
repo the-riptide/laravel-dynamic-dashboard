@@ -23,7 +23,7 @@ class DynImage extends DynModel
 
     public function setContent($content, $type) {
 
-        if (is_string($content)) $this->content = $content; 
+        if (is_string($content) | $content == null) $this->content = $content; 
         else {
 
             $this->content = $content->store('/dynImages', 'public');
