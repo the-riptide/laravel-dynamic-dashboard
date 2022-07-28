@@ -195,7 +195,7 @@ abstract class DynamicBase {
     }
 
     /** adds exta fields like component names and placeholder texts */
-    public function dashboardFields() : DynamicBase
+    public function getDashboardFields() : DynamicBase
     {
         $fields = $this->fields();
 
@@ -214,6 +214,13 @@ abstract class DynamicBase {
 
         return $this;
     }
+
+
+    public function relationships() : Collection
+    {
+        return collect([]);
+    }
+
 
     private function prepHead($head) {
 

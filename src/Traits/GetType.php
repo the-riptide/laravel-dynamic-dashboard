@@ -4,6 +4,7 @@ namespace TheRiptide\LaravelDynamicDashboard\Traits;
 
 use Exception;
 use Illuminate\Support\Str;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\File;
 use TheRiptide\LaravelDynamicDashboard\Models\DynHead;
 use TheRiptide\LaravelDynamicDashboard\Objects\DynamicBase;
@@ -20,6 +21,11 @@ trait GetType {
         throw new Exception("Not an existing type", 1);
     }
 
+    public function getTypes(Collection $heads)
+    {
+        return $heads->map( fn ($head) => $head->getType());
+    }
+
     public function getAllTypes() 
     {
         $files = File::allFiles(app_path(config('dyndash.folder')));
@@ -32,8 +38,6 @@ trait GetType {
 
     private function setModel($model, $head = null, $getCache = true)
     {
-        // if(is_string($head)) $head = DynHead::Find($head);
-
         return $head 
             ? (new $model)->find($head, $getCache)
             : (new $model)->new();

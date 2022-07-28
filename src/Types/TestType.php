@@ -51,4 +51,13 @@ class TestType extends DynamicBase
             ],
         ]);
     }
+
+    public function relationships() : Collection
+    {
+        return collect([
+            'Article' => [
+                'name' => 'head',
+            ],
+        ]);
+    }
 }
