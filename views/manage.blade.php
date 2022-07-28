@@ -12,6 +12,9 @@
             @foreach ($fields as $field)
                 <x-dynamic-component :component="$field->component" :model="$field" />
             @endforeach
+            @foreach ($relations as $relation)
+                <x-dynamic-component :component="$relation->component" :relation="$relation" />
+            @endforeach
         </div>
 
         {{-- Buttons --}}

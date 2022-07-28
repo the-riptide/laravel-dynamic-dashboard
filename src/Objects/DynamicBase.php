@@ -150,6 +150,11 @@ abstract class DynamicBase {
                     
                     }
                 }
+            )->merge(
+                $this->relationships()
+                ->mapWithKeys(
+                    fn ($item, $key) => ['rel_' .Str::of($key)->snake() => 'nullable|array']
+                )
             );
     }
 

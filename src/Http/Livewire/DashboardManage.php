@@ -3,11 +3,12 @@
 namespace TheRiptide\LaravelDynamicDashboard\Http\Livewire;
 
 use Livewire\Component;
+use Illuminate\Support\Str;
 use Livewire\WithFileUploads;
-use TheRiptide\LaravelDynamicDashboard\Objects\Menu;
 use Illuminate\Support\Facades\Cache;
-use TheRiptide\LaravelDynamicDashboard\Security\Authorize;
+use TheRiptide\LaravelDynamicDashboard\Objects\Menu;
 use TheRiptide\LaravelDynamicDashboard\Traits\GetType;
+use TheRiptide\LaravelDynamicDashboard\Security\Authorize;
 
 class DashboardManage extends Component
 {
@@ -35,6 +36,10 @@ class DashboardManage extends Component
             fn ($item) => $this->{$item->name} = $item->getContent()
         );
 
+        $relations = $dynamic->getRelationshipsForDashboard();
+        $relations->map(fn ($item) => $this->{$item->model} = $item->selected);
+        
+        Cache::put('dynamicRelations', $relations);
         Cache::put('dynamicObject', $dynamic);
     }
 
@@ -45,11 +50,11 @@ class DashboardManage extends Component
 
     public function render()
     {
-
         $this->disabled = false;
 
         return view('dyndash::manage', [
             'fields' => Cache::get('dynamicObject')->models(),
+            'relations' => Cache::get('dynamicRelations'),
         ])->extends('dashcomp::layout', ['menuItems' => (new Menu)->items ])
         ->section('body');
     }
@@ -70,6 +75,11 @@ class DashboardManage extends Component
         );
 
         $dynamic->create($content);
+
+        Cache::get('dynamicRelations')->map(
+            fn ($relation) => $dynamic->sync($relation->relationship, collect($this->{$relation->model}))
+        );
+
 
         return redirect()->route('dyndash.index', [$this->type])->with("status", $this->type . " saved successfully!");
     }

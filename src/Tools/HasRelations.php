@@ -7,12 +7,11 @@ use Illuminate\Support\Collection;
 use function PHPUnit\Framework\isInstanceOf;
 use TheRiptide\LaravelDynamicDashboard\Models\DynHead;
 use TheRiptide\LaravelDynamicDashboard\Models\DynRelation;
+use TheRiptide\LaravelDynamicDashboard\Objects\DashboardRelation;
 use TheRiptide\LaravelDynamicDashboard\Objects\DynamicBase;
 
 trait HasRelations 
 {
-    protected $relationComponent = 'multidropdown';
-
     public function detach(DynamicBase|Collection $remove)
     {
         $remove instanceof Collection
@@ -54,16 +53,15 @@ trait HasRelations
 
         $this->detach(
             $this->getTypes(
-                DynHead::Wherein('id', $original->diff($sync->pluck('id')))->get()
+                DynHead::Wherein('id', $original->diff($sync))->get()
             )
         );
         
         $this->attach(
             $this->getTypes(
-                DynHead::Wherein('id', $sync->pluck('id')->diff($original))->get()
+                DynHead::Wherein('id', $sync->diff($original))->get()
             )
         );
-
     }
 
     public function relation($type)
@@ -95,25 +93,9 @@ trait HasRelations
 
     public function getRelationshipsForDashboard()
     {
-        return $this->relationships()->mapWithKeys(
-            function($content, $relationship) 
-            {
-                return [
-                    $relationship => [ 
-                        'items' => DynHead::where('dyn_type', $relationship)->get()
-                        ->mapWithKeys( 
-                            function ($head) { 
-                                $item = $head->getType();
-                                return [
-                                    $item->id => $item->{isset($content['name']) ? $content['name'] : 'head'} 
-                                ];
-                            }
-                        ), 
-                        'selected' => $this->relation($relationship)->pluck('id'),                            
-                        'component' => isset($content['component']) ? $content['component'] : $this->relationComponent,
-                    ],
-                ];
-            }
+        return $this->relationships()
+        ->map(
+            fn ($content, $relationship) => New DashboardRelation($this, $relationship, $content)
         );
     }
 
