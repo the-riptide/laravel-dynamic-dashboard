@@ -26,7 +26,7 @@ class DashboardRelation
 
     private function prepItems($content)
     {
-        $field = isset($content['name']) ? $content['name'] : 'head';
+        $field = isset($content['show']) ? $content['show'] : 'head';
 
         return DynHead::where('dyn_type', $this->relationship)->get()
         ->mapWithKeys( 

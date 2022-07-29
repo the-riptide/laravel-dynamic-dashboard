@@ -39,8 +39,8 @@ class DashboardManage extends Component
         $relations = $dynamic->getRelationshipsForDashboard();
         $relations->map(fn ($item) => $this->{$item->model} = $item->selected);
         
-        Cache::put('dynamicRelations', $relations);
-        Cache::put('dynamicObject', $dynamic);
+        Session(['dynamicRelations' =>  $relations]);
+        Session(['dynamicObject' => $dynamic]);
     }
 
     public function rules()
@@ -53,8 +53,8 @@ class DashboardManage extends Component
         $this->disabled = false;
 
         return view('dyndash::manage', [
-            'fields' => Cache::get('dynamicObject')->models(),
-            'relations' => Cache::get('dynamicRelations'),
+            'fields' => Session('dynamicObject')->models(),
+            'relations' => Session('dynamicRelations'),
         ])->extends('dashcomp::layout', ['menuItems' => (new Menu)->items ])
         ->section('body');
     }
@@ -67,20 +67,26 @@ class DashboardManage extends Component
 
         $this->validate();
 
-        $dynamic = Cache::get('dynamicObject');
-
-        $content = $dynamic->models()
-        ->mapWithKeys(
-            fn ($item) => [$item->name => $this->{$item->name}] 
-        );
-
-        $dynamic->create($content);
-
-        Cache::get('dynamicRelations')->map(
-            fn ($relation) => $dynamic->sync($relation->relationship, collect($this->{$relation->model}))
-        );
-
+        $dynamic = $this->updateModels(Session('dynamicObject'));
+        $this->updateRelations($dynamic);
 
         return redirect()->route('dyndash.index', [$this->type])->with("status", $this->type . " saved successfully!");
+    }
+
+    private function updateModels($dynamic)
+    {
+        return $dynamic->create(
+            $dynamic->models()
+                ->mapWithKeys(
+                    fn ($item) => [$item->name => $this->{$item->name}] 
+                )
+        );
+    }
+
+    private function updateRelations($dynamic)
+    {
+        Session('dynamicRelations')->map(
+            fn ($relation) => $dynamic->sync($relation->relationship, collect($this->{$relation->model}))
+        );
     }
 }
