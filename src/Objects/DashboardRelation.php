@@ -13,7 +13,7 @@ class DashboardRelation
     public $relationship;
     public $model;
 
-    public $component = 'multi-dropdown';
+    public $component = 'dashcomp::input.multi-dropdown';
 
     public function __construct(DynamicBase $base, $relationship, $content)
     {

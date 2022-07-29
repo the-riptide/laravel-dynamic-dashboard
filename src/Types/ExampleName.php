@@ -84,4 +84,18 @@ class ExampleName extends DynamicBase {
             ],
         ]);
     }
+
+    /** Here you can set up relationships to this type. The Key should match the Type that you're creating a relationship with. 
+     * In a sub array, you can set what will be shown in the in the dropdown by specing 'show' (e.g. ['show' => 'head']) */
+    public function relationships() : Collection
+    {
+        return collect([
+            'Event' => [
+                'show' => 'name',
+            ],
+            'Timer' => [
+                'show' => 
+            ]
+        ]);
+    }
 }
