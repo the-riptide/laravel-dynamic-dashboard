@@ -50,6 +50,14 @@ abstract class DynamicBase {
         return $this;
     }
 
+    /** just like a standard laravel model, this returns the first instance. */
+    public function first($getCache = true)
+    {
+        return ($head = DynHead::orderby($this->setOrderBy())->where('dyn_type', $this->new()->head()->dyn_type)->first()) 
+            ? $this->find($head, $getCache) 
+            : null;
+    }
+
     /** updates the cache with the current instance */
     public function putInCache() {
 
@@ -116,6 +124,7 @@ abstract class DynamicBase {
         )->filter();
     }
 
+    /** works with the index function to determine if a dashboard index column is simply a value or a function */
     public function setValue($field) : string
     {
         if (isset($this->index()[$field]['function']) && $this->index()[$field]['function']) 
@@ -126,21 +135,25 @@ abstract class DynamicBase {
         return $this->$field;
     }
 
+    /** this getter returns all the underlying models related to the field of this instance's type */
     public function models() : Collection
     {
         return $this->dyn_models;
     }
 
+    /** this getter returns the linked list head related to this instance of  the type */
     public function head() : DynHead
     {
         return $this->dyn_head;
     }
 
+    /** returns the type */
     public function type() : string
     {
         return $this->dyn_type;
     }
 
+    /** returns the validation rules of the fields */
     public function rules() : Collection
     {
         return $this->dyn_models
@@ -165,16 +178,19 @@ abstract class DynamicBase {
             );
     }
 
+    /** if the specific type has no index function, this will return all the existing fields */
     public function index() : Collection
     {
         return $this->fields()->map(fn ($attribute, $key) => $key);
     }
 
+    /** if the specific type has no fields function, this will return an empty collection to avoid errors */
     public function fields() : Collection
     {
         return collect([]);
     }
 
+    /** The create method will take an array of data, use it to create an instance of the current Type and return it */
     public function create($contents = []) : DynamicBase 
     {
         if (! $this->dyn_head || ! $this->dyn_head->exists()) $this->getNewModels();
@@ -191,6 +207,7 @@ abstract class DynamicBase {
         return $this;
     }
 
+    /** this will run through all the underlying models and generate data for them using their factories */
     public function factory() : DynamicBase
     {
         $model = $this->new();
@@ -228,6 +245,7 @@ abstract class DynamicBase {
     }
 
 
+    /** an empty collection to avoid a relationships call in the dashboard generating an error */
     public function relationships() : Collection
     {
         return collect([]);
