@@ -29,16 +29,14 @@ abstract class DynamicBase {
     protected $order_by = 'updated_at';
 
     private $modelPath = 'TheRiptide\LaravelDynamicDashboard\Models\\';
-    
+
+    /** Similar to 'find' on model. 
+     * You can find using the DynHead model, the slug or the id.
+     * The second parameter determines if the find should come from the cache.
+    */
     public function find(DynHead|string $head, $getCache = true) : DynamicBase
     {
-        if (is_string($head)) 
-        {
-            $head = is_numeric($head) 
-                ? DynHead::find($head)
-                : DynHead::firstWhere('slug', $head);
-        }
-
+        if (is_string($head)) $head = is_numeric($head) ? DynHead::find($head) : DynHead::firstWhere('slug', $head);
 
         if ($getCache && $this->existCache($head->dyn_type, $head->id)) return $this->firstCache($head->dyn_type, $head->id);
 
@@ -52,11 +50,13 @@ abstract class DynamicBase {
         return $this;
     }
 
+    /** updates the cache with the current instance */
     public function putInCache() {
 
         $this->putCache($this->dyn_head->dyn_type, $this->dyn_head->id, $this);
     }
 
+    /** create a new instance of this type */
     public function new() : DynamicBase
     {
         $this->getNewModels();
@@ -65,31 +65,37 @@ abstract class DynamicBase {
         return $this;
     }
 
+    /** fresh up the type from the database */
     public function fresh() : DynamicBase
     {
         return $this->find($this->id, false);
     }
 
+    /** get all the Type. The parameter determines if the types come from the cache or the database  */
     public function get($getCache = true) : Collection
     {
         return (new DynamicCollection(class_basename($this), $getCache))->get();
     }
 
+    /** a getter that returns if the type's delete has set 'canDelete' to true or not */
     public function canDelete() : bool
     {
         return $this->canDelete;
     }
 
+    /** a getter that returns if the type's delete has set 'canCreate' to true or not */
     public function canCreate() : bool
     {
         return $this->canCreate;
     }
 
+    /** a getter that returns if the type's delete has set 'canOrder' to true or not */
     public function canOrder() : bool
     {
         return $this->canOrder;
     }
 
+    /** returns what the type should be ordered by */
     public function setOrderBy() : string
     {
         return $this->canOrder
@@ -97,6 +103,7 @@ abstract class DynamicBase {
             : $this->order_by;
     }
     
+    /** returns the index table column heads */
     public function tableHeads() : Collection
     {
         return $this->index()->mapWithKeys(
