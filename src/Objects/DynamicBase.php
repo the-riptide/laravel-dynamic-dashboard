@@ -280,7 +280,9 @@ abstract class DynamicBase {
             function ($item) use ($contents) {
 
                 $item->unsetTempAttributes();
-                $item->setContent($contents[$item->name] ?? null, $this->dyn_head->dyn_type);
+                $item->setContent($contents[$item->name] ?? null, $this->dyn_head);
+                $item->attachHead($this->dyn_head);
+
                 $item->save();
                 
                 if (class_basename($this->previous) == 'DynHead' ) $this->previous->setSlug($item->content);
