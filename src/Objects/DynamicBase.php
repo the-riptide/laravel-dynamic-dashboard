@@ -207,6 +207,11 @@ abstract class DynamicBase {
         return $this;
     }
 
+    public function save() : DynamicBase
+    {
+        return $this->create();
+    }
+
     /** this will run through all the underlying models and generate data for them using their factories */
     public function factory() : DynamicBase
     {
@@ -244,16 +249,14 @@ abstract class DynamicBase {
         return $this;
     }
 
-
     /** an empty collection to avoid a relationships call in the dashboard generating an error */
     public function relationships() : Collection
     {
         return collect([]);
     }
 
-
-    private function prepHead($head) {
-
+    private function prepHead($head) 
+    {
         Collect(Schema::getColumnListing($head->getTable()))->map(
             function ($field) use ($head) {
                 if (! Str::startswith($field, 'next')) {
@@ -264,8 +267,8 @@ abstract class DynamicBase {
         );
     }
 
-    private function prepFields($objects) {
-
+    private function prepFields($objects) 
+    {
         $objects->map(fn ($item) => $this->{$item->name} = $item->content);
     }
 
@@ -314,7 +317,7 @@ abstract class DynamicBase {
         );
     }
 
-    private function getTableHead($key)
+    private function getTableHead($key) : string
     {
         return isset($this->fields()[$key]['properties']['title'])
             ? $this->fields()[$key]['properties']['title']
