@@ -249,6 +249,23 @@ abstract class DynamicBase {
         return $this;
     }
 
+    public function where(string $haystack, string $needle)
+    {
+        $field = $this->fields()[$haystack];
+
+        $model = $this->modelPath . 'Dyn' . Str::ucfirst($field['type']);
+
+        return DynHead::wherein(
+            'id', (new $model)
+            ->where('name', $haystack)
+            ->where('dyn_type', class_basename($this))
+            ->pluck('dyn_head_id')
+        )
+        ->get()
+        ->map(fn ($head) => $head->getType());
+        
+    }
+
     /** an empty collection to avoid a relationships call in the dashboard generating an error */
     public function relationships() : Collection
     {
