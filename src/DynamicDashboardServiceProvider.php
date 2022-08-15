@@ -7,6 +7,7 @@ use Illuminate\Support\ServiceProvider;
 use TheRiptide\LaravelDynamicDashboard\Tools\ManageImage;
 use TheRiptide\LaravelDynamicDashboard\Commands\CreateTypeCommand;
 use TheRiptide\LaravelDynamicDashboard\Commands\ModifyTypeCommand;
+use TheRiptide\LaravelDynamicDashboard\Commands\UpdateTypeCommand;
 use TheRiptide\LaravelDynamicDashboard\Http\Livewire\DashboardIndex;
 use TheRiptide\LaravelDynamicDashboard\Http\Livewire\DashboardManage;
 
@@ -37,6 +38,7 @@ class DynamicDashboardServiceProvider extends ServiceProvider
             $this->commands([
                 CreateTypeCommand::class,
                 ModifyTypeCommand::class,
+                UpdateTypeCommand::class,
             ]);
         }
 
