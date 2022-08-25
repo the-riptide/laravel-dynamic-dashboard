@@ -4,7 +4,6 @@ namespace TheRiptide\LaravelDynamicDashboard\Objects;
 
 use Illuminate\Support\Str;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Schema;
 use TheRiptide\LaravelDynamicDashboard\Models\DynHead;
 use TheRiptide\LaravelDynamicDashboard\Tools\UseCache;
 use TheRiptide\LaravelDynamicDashboard\Traits\GetType;

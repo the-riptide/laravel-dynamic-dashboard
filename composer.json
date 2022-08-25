@@ -28,7 +28,6 @@
     "autoload" : {
         "psr-4" : {
             "TheRiptide\\LaravelDynamicDashboard\\": "src/"
-
         },
         "files": [
             "src/helpers.php"
@@ -39,10 +38,14 @@
     "minimum-stability": "dev",
     "require": {
         "php": "^8.0",
-        "laravel/framework": "^8.0|^9.0",
+        "laravel/framework": "^9.26",
         "livewire/livewire": "^2.5",        
         "intervention/image": "^2.7",
         "the-riptide/laravel-dashboard-components": "^0.1.10",
         "doctrine/dbal": "^3.3"
+    }, 
+    "require-dev" : {
+        "orchestra/testbench": "^7.7"
     }
+
 }
