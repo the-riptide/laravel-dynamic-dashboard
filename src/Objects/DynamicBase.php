@@ -10,6 +10,7 @@ use TheRiptide\LaravelDynamicDashboard\Traits\GetType;
 use TheRiptide\LaravelDynamicDashboard\Tools\AccessTypeFile;
 use TheRiptide\LaravelDynamicDashboard\Tools\HasRelations;
 use TheRiptide\LaravelDynamicDashboard\Collections\DynamicCollection;
+use TheRiptide\LaravelDynamicDashboard\Models\DynString;
 
 abstract class DynamicBase {
 

@@ -40,6 +40,6 @@
     "intervention/image": "^2.7",
     "the-riptide/laravel-dashboard-components": "^0.1.10",
     "doctrine/dbal": "^3.3"
-  },
+  }
 
 }
