@@ -30,7 +30,7 @@ class DynHead extends DynBase
 
     public function setSlug($text) {
 
-        if (! $this->exists()) {
+        if (! $this->slug) {
 
             $text = Str::of($text)->words(4)->slug('-')->__toString();
             $count = (new $this)->where('slug', 'like', $text . '%')->count();
