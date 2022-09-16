@@ -166,6 +166,8 @@ abstract class DynamicBase {
     private function toDataBase($contents)
     {
         if (isset($this->contents)) $contents = $this->contents->merge($contents);
+        
+        $this->dyn_head->save();
 
         $this->dyn_models->map(
             function ($item) use ($contents) {
@@ -179,7 +181,7 @@ abstract class DynamicBase {
                 if (class_basename($this->previous) == 'DynHead' ) $this->previous->setSlug($item->content);
 
                 $this->previous->conNext($item);
-                $this->previous->save();
+                $this->previous->save();            
 
                 $this->previous = $item;
             }
