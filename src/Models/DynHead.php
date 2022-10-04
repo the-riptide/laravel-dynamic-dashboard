@@ -33,7 +33,7 @@ class DynHead extends DynBase
         if (! $this->slug) {
 
             $text = Str::of($text)->words(4)->slug('-')->__toString();
-            $count = (new $this)->where('slug', 'like', $text . '%')->count();
+            $count = (new $this)->where('dyn_type', $this->dyn_type)->where('slug', 'like', $text . '%')->count();
     
             $this->slug = ($count === 0)
                 ? $text
