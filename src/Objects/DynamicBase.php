@@ -113,7 +113,6 @@ abstract class DynamicBase {
         return $this->dyn_type;
     }
 
-
     /** The create method will take an array of data, use it to create an instance of the current Type and return it */
     public function create($contents = []) : DynamicBase 
     {

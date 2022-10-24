@@ -49,7 +49,7 @@ trait AccessTypeFile {
     }
 
     /** works with the index function to determine if a dashboard index column is simply a value or a function */
-    public function setValue($field) : string
+    public function setValue($field) : string|null
     {
         return isset($this->index()[$field]['function']) && $this->index()[$field]['function'] 
             ? $this->$field()
