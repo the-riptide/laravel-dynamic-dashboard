@@ -38,20 +38,26 @@ abstract class DynamicBase {
      * You can find using the DynHead model, the slug or the id.
      * The second parameter determines if the find should come from the cache.
     */
-    public function find(DynHead|string $head, $getCache = true) : DynamicBase
+    public function find(DynHead|string $head, $getCache = true): DynamicBase|null
     {
-        if (is_string($head)) $head = is_numeric($head) ? DynHead::find($head) : DynHead::firstWhere('slug', $head);
+        if (is_string($head)) {
+            $head = is_numeric($head) ? DynHead::find($head) : DynHead::firstWhere('slug', $head);
+        }
 
-        if ($getCache && $this->existCache($head->dyn_type, $head->id)) return $this->firstCache($head->dyn_type, $head->id);
+        if ($head) {
+            if ($getCache && $this->existCache($head->dyn_type, $head->id)) {
+                return $this->firstCache($head->dyn_type, $head->id);
+            }
 
-        $this->dyn_models = $head->getAll();
-        $this->dyn_head = $this->dyn_models->shift();
-        $this->prepHead($this->dyn_head);
-        $this->prepFields($this->dyn_models);
+            $this->dyn_models = $head->getAll();
+            $this->dyn_head = $this->dyn_models->shift();
+            $this->prepHead($this->dyn_head);
+            $this->prepFields($this->dyn_models);
 
-        $this->putInCache();
+            $this->putInCache();
 
-        return $this;
+            return $this;
+        } else return null;
     }
 
     /** just like a standard laravel model, this returns the first instance. */
