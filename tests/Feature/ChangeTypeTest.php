@@ -135,7 +135,7 @@ class ChangeTypeTest extends TestCase
     }    
 
     /** @test */
-    public function can_add_single_models_via_modify_type_run_function()
+    public function can_add_single_models_to_middle_via_modify_type_run_function()
     {
         (new TestType)->factory()->create();
         $head = DynHead::first();
@@ -160,6 +160,34 @@ class ChangeTypeTest extends TestCase
 
         $this->assertEquals($after->models()[0]->name, $removed->name);
         $this->assertEquals($after->models()[1], $model);
+    }    
+
+    /** @test */
+    public function can_add_single_models_to_end_via_modify_type_run_function()
+    {
+        (new TestType)->factory()->create();
+        $head = DynHead::first();
+
+        $removed = $head->getAll()[4];
+
+        $model = $head->getAll()[3];
+        $model->next_model_id = null;
+        $model->next_model = null;
+        $model->save();
+
+        $before = (new TestType)->find($head->id, false);
+
+        $this->assertCount(3, $before->models());
+        $this->assertObjectNotHasAttribute($removed->name, $before);
+
+        (new ModifyType)->run('TestType');
+
+        $after = (new TestType)->find($head->id, false);
+
+        $this->assertCount(4, $after->models());
+        $this->assertObjectHasAttribute($removed->name, $after);
+
+        $this->assertEquals($after->models()[2]->next_model, class_basename($removed));
     }    
     
     /** @test */

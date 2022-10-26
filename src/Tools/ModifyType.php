@@ -19,9 +19,7 @@ class ModifyType {
             ->get(false)
             ->map( function ($item) { 
                 $this->fix($item); 
-            });
-
-        
+            });        
     }
 
     private function fix($item)
@@ -57,7 +55,8 @@ class ModifyType {
 
     private function compare($field, $model, $previous, $fields, $models, $moved)
     {        
-        if ($field && $model->name == $field['name'] && 'Dyn' . Str::ucfirst($field['type']) == class_basename($model))
+
+        if ($model != null && $field && $model->name == $field['name'] && 'Dyn' . Str::ucfirst($field['type']) == class_basename($model))
         {
             $previous = $model;
             $field = $fields->shift();
@@ -65,10 +64,12 @@ class ModifyType {
         }
         else
         {            
-            if ($field && isset($fields[$model->name]) && $this->models->where('name', $field['name'])->first() != null) 
+            if ($model != null && $field && isset($fields[$model->name]) && $this->models->where('name', $field['name'])->first() != null) 
             {
                 $previous = $this->switchModel(
-                    $previous, $model, $this->models->where('name', $field['name'])->first(),
+                    $previous, 
+                    $model, 
+                    $this->models->where('name', $field['name'])->first(),
                 );
 
                 $models = $this->switchModelsCollection($models, $model, $previous);
@@ -76,13 +77,14 @@ class ModifyType {
                 $field = $fields->shift();
                 $model = $models->shift();
             }
-            elseif ($field['name'] == $model->name && $field['type'] != class_basename($model))
+            elseif ($model != null && $field['name'] == $model->name && $field['type'] != class_basename($model))
             {
                 $previous = $this->changeModelType($field, $previous, $model);
 
                 $field = $fields->shift();
+                $model = $models->shift();
             }
-            elseif (isset($fields[$model->name])) 
+            elseif ($model == null || isset($fields[$model->name])) 
             {
                 $previous = $this->insertModel($previous, $model, $field);
                 $field = $fields->shift();
@@ -94,7 +96,7 @@ class ModifyType {
             }
         }
 
-        if ($field != null && $model != null) $this->compare($field, $model, $previous, $fields, $models, $moved);
+        if ($field != null || $model != null) $this->compare($field, $model, $previous, $fields, $models, $moved);
     }
 
     private function changeModelType($field, $previous, $model)
