@@ -38,7 +38,7 @@
     "laravel/framework": "^9.26",
     "livewire/livewire": "^2.5",
     "intervention/image": "^2.7",
-    "the-riptide/laravel-dashboard-components": "^0.1.10",
+    "the-riptide/laravel-dashboard-components": "^0.1.11",
     "doctrine/dbal": "^3.3"
   }
 

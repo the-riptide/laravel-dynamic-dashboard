@@ -9,6 +9,7 @@ abstract class DynModel extends DynBase
     
     public $rules = 'required';  
     public $component = 'dashcomp::input.simple';
+    protected $guarded = [];
 
     public function setContent($content, $dynHead)
     {

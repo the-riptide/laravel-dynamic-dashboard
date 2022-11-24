@@ -3,9 +3,7 @@
 namespace TheRiptide\LaravelDynamicDashboard\Http\Livewire;
 
 use Livewire\Component;
-use Illuminate\Support\Str;
 use Livewire\WithFileUploads;
-use Illuminate\Support\Facades\Cache;
 use TheRiptide\LaravelDynamicDashboard\Objects\Menu;
 use TheRiptide\LaravelDynamicDashboard\Traits\GetType;
 use TheRiptide\LaravelDynamicDashboard\Security\Authorize;
@@ -20,6 +18,7 @@ class DashboardManage extends Component
     public $identifier;
     private $previous;
     public $disabled;
+    public $fields;
 
     public function mount($type, $id = null)
     {
@@ -52,8 +51,9 @@ class DashboardManage extends Component
     {
         $this->disabled = false;
 
+        $this->fields = Session('dynamicObject')->models();
+
         return view('dyndash::manage', [
-            'fields' => Session('dynamicObject')->models(),
             'relations' => Session('dynamicRelations'),
         ])->extends('dashcomp::layout', ['menuItems' => (new Menu)->items ])
         ->section('body');
@@ -71,6 +71,14 @@ class DashboardManage extends Component
         $this->updateRelations($dynamic);
 
         return redirect()->route('dyndash.index', [$this->type])->with("status", $this->type . " saved successfully!");
+    }
+
+    public function removeImage($model)
+    {
+        $dynamic = Session('dynamicObject')->fresh();
+        $model = $dynamic->models()->where('name', $model)->first();
+        $model->update(['content' => null]);    
+        Session(['dynamicObject' => $dynamic->fresh()->getDashboardFields()]);
     }
 
     private function updateModels($dynamic)
