@@ -77,6 +77,7 @@ class DashboardManage extends Component
     {
         $dynamic = Session('dynamicObject')->fresh();
         $model = $dynamic->models()->where('name', $model)->first();
+        $model->livewireRemoveImage($this->type);
         $model->update(['content' => null]);    
         Session(['dynamicObject' => $dynamic->fresh()->getDashboardFields()]);
     }

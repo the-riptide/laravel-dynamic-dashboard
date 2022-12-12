@@ -24,21 +24,45 @@ class DynImage extends DynModel
     public function setContent($content, $type) {
 
         if (is_string($content) | $content == null) $this->content = $content; 
+
         else {
+            $sizes = $this->grabConfigSizes($type);
+
+            if ($this->content) $this->deleteCurrentImage($sizes, 'dynImages');
 
             $this->content = $content->store('/dynImages', 'public');
             if ($content->extension() !== 'svg') 
-                $this->createImageFormats($this->grabConfigSizes($type), 'dynImages', $this->content);
+                $this->createImageFormats($sizes, 'dynImages');
         }    
     }
 
-    private function createImageFormats($sizes, $drive, $file) {
+    public function livewireRemoveImage($type)
+    {
+        $this->deleteCurrentImage($this->grabConfigSizes($type), 'dynImages');
+    }
+
+    private function deleteCurrentImage($sizes, $drive)
+    {
+        $path = storage_path() . '/app/public/';
+        $image = $this->imageName();
+
+        foreach ($sizes as $sizeName => $width) {
+
+            $subPath = $path . $drive . '/' . $sizeName . '/';
+
+            if (File::exists($subPath . $image)) File::delete($subPath. $image);
+        }
+
+        if (File::exists($path . $drive . '/' . $image)) File::delete($path . $drive . '/' . $image);
+    }
+
+    private function createImageFormats($sizes, $drive) {
 
         $path = storage_path() . '/app/public/';
-        $fullPath = $path  . $file;
+        $fullPath = $path  . $this->content;
         $imageSize = getimagesize($fullPath);
 
-        $image = Str::of($file)->afterLast('/');
+        $image = $this->imageName();
         
         foreach ($sizes as $sizeName => $width) {
 
@@ -68,6 +92,11 @@ class DynImage extends DynModel
                 : config('dyndash.images.sizes.' . $type);
         }
         else return $this->standardSizes();
+    }
+
+    private function imageName()
+    {
+        return Str::of($this->content)->afterLast('/');
     }
 
     private function standardSizes()
