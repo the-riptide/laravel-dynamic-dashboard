@@ -146,7 +146,7 @@
                         <div class="flex items-center space-x-4 py-4">
 
                             {{-- Delete --}}
-                            <form wire:submit.prevent="delete">
+                            <form wire:submit="delete">
                                 <div class="flex justify-center py-4">
 
                                     <button

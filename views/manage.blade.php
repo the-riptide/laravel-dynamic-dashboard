@@ -1,6 +1,6 @@
 <div>
 
-    <form wire:submit.prevent="save">
+    <form wire:submit="save">
 
         {{-- Header --}}
         @section('title')
@@ -12,7 +12,7 @@
             @foreach ($fields as $field)
                 <x-dynamic-component :component="$field->component" :model="$field" />
             @endforeach
-            @foreach ($relations as $relation)
+            @foreach ($relationInputs as $relation)
                 <x-dynamic-component :component="$relation->component" :relation="$relation" />
             @endforeach
         </div>

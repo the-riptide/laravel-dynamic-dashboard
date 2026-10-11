@@ -99,7 +99,7 @@ trait AccessTypeFile {
         return collect([]);
     }
 
-    /** adds exta fields like component names and placeholder texts */
+    /** adds exta fields like component names and placeholder texts; inputs bind to the manage form's values array */
     public function getDashboardFields() : DynamicBase
     {
         $fields = $this->fields();
@@ -112,7 +112,7 @@ trait AccessTypeFile {
                     foreach ($fields[$model->name]['properties'] as $key => $field) $model->$key = $field; 
                 }
                 
-                if ($model->model === null) $model->model = $model->name;
+                if ($model->model === null) $model->model = 'values.' . $model->name;
                 if ($model->title === null) $model->title = $model->name;
             }
         );

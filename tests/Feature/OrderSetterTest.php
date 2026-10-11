@@ -1,20 +1,18 @@
 <?php
 
-namespace Tests\Feature;
+namespace TheRiptide\LaravelDynamicDashboard\Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
-use Tests\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
+use TheRiptide\LaravelDynamicDashboard\Tests\TestCase;
 
 class OrderSetterTest extends TestCase
 {
 
-    /** @test
-     * 
-     * @dataProvider arrayProvider
-     * 
-     * 
-     */
+    #[Test]
+    #[DataProvider('arrayProvider')]
     public function can_prepare_array($begin, $end, $expected)
     {
 
@@ -40,7 +38,7 @@ class OrderSetterTest extends TestCase
 
     }
 
-    public function arrayProvider() 
+    public static function arrayProvider() 
     {
         return [
             'first' => [4, 8, collect([4,5,6,7,8,])],

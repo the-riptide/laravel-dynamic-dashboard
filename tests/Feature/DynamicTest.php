@@ -1,8 +1,10 @@
 <?php
 
-namespace Tests\Feature;
+namespace TheRiptide\LaravelDynamicDashboard\Tests\Feature;
 
-use Tests\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
+use TheRiptide\LaravelDynamicDashboard\Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use TheRiptide\LaravelDynamicDashboard\Models\DynHead;
@@ -13,9 +15,8 @@ class DynamicTest extends TestCase
 {
     use RefreshDatabase;
 
-    /** @test 
-     * @dataProvider componentList
-    */
+    #[Test]
+    #[DataProvider('componentList')]
     public function can_connect_components($component)
     {
         $head = DynHead::factory()->create();
@@ -27,7 +28,7 @@ class DynamicTest extends TestCase
         $this->assertEquals($head->next_model, class_basename($text));
     }
 
-    public function componentList()
+    public static function componentList()
     {
         return [
             'string' => [DynString::class],
@@ -35,7 +36,7 @@ class DynamicTest extends TestCase
         ];
     }
 
-    /** @test */
+    #[Test]
     public function can_connect_multiple_components()
     {
         $head = DynHead::factory()->create();
@@ -53,7 +54,7 @@ class DynamicTest extends TestCase
         $this->assertEquals($model->next_model, class_basename($textTwo));
     }
 
-    /** @test */
+    #[Test]
     public function can_use_get_all_to_get_all_components() {
 
         $head = DynHead::factory()->create();
@@ -72,7 +73,7 @@ class DynamicTest extends TestCase
         $this->assertEquals($model[2]->name, $textTwo->name);
     }
 
-    /** @test */
+    #[Test]
     public function delete_all_on_head_deletes_all_models()
     {
         $head = DynHead::factory()->create();
@@ -94,7 +95,7 @@ class DynamicTest extends TestCase
 
 
     }
-    /** @test */
+    #[Test]
     public function can_get_text_by_name()
     {
         $head = DynHead::factory()->create();
@@ -108,7 +109,7 @@ class DynamicTest extends TestCase
         $this->assertEquals($text->name, $model->name);
     }
 
-    /** @test */
+    #[Test]
     public function can_unset_temporary_attributes_on_dynamic_model(){
 
         $text = DynText::Factory()->create();

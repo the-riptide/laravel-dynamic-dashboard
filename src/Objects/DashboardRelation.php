@@ -11,6 +11,9 @@ class DashboardRelation
     public $items;
     public $selected;
     public $relationship;
+    /** The key under the manage form's relations array, e.g. rel_experience_technology. */
+    public $key;
+    /** The wire:model path the input binds to. */
     public $model;
 
     public $component = 'dashcomp::input.multi-dropdown';
@@ -18,7 +21,8 @@ class DashboardRelation
     public function __construct(DynamicBase $base, $relationship, $content)
     {
         $this->relationship = $relationship;
-        $this->model = 'rel_' .Str::of($relationship)->snake();
+        $this->key = 'rel_' .Str::of($relationship)->snake();
+        $this->model = 'relations.' . $this->key;
         $this->items = $this->prepItems($content); 
         $this->selected = $base->relation($relationship)->pluck('id');
         $this->component = isset($content['component']) ? $content['component'] : $this->component;

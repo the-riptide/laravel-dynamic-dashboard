@@ -1,8 +1,9 @@
 <?php
 
-namespace Tests\Feature;
+namespace TheRiptide\LaravelDynamicDashboard\Tests\Feature;
 
-use Tests\TestCase;
+use PHPUnit\Framework\Attributes\Test;
+use TheRiptide\LaravelDynamicDashboard\Tests\TestCase;
 use App\Dyndash\Article;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use TheRiptide\LaravelDynamicDashboard\Types\TestType;
@@ -12,7 +13,7 @@ class RelationTest extends TestCase
 {
     use RefreshDatabase;
 
-    /** @test */
+    #[Test]
     public function can_sync_one_type_to_another()
     {
         $one = (new TestType())->factory()->create();
@@ -28,7 +29,7 @@ class RelationTest extends TestCase
         $this->assertEquals($relation->link_type, $two->type());
     }    
 
-    /** @test */
+    #[Test]
     public function can_sync_one_type_to_two_others()
     {
         $one = (new TestType())->factory()->create();
@@ -44,7 +45,7 @@ class RelationTest extends TestCase
         $this->assertEquals($relation->link_id, $two->id);
         $this->assertEquals($relation->link_type, $two->type());
 
-        $relation = DynRelation::find(2);
+        $relation = DynRelation::orderBy('id')->skip(1)->first();
 
         $this->assertEquals($relation->origin_id, $one->id);
         $this->assertEquals($relation->origin_type, $one->type());
@@ -52,7 +53,7 @@ class RelationTest extends TestCase
         $this->assertEquals($relation->link_type, $three->type());
     }    
 
-    /** @test */
+    #[Test]
     public function can_grab_one_relation()
     {
         $one = (new TestType())->factory()->create();
@@ -66,7 +67,7 @@ class RelationTest extends TestCase
         $this->assertEquals($relation->head, $two->head);
     }
 
-    /** @test */
+    #[Test]
     public function can_grab_one_relation_reverse()
     {
         $one = (new TestType())->factory()->create();
@@ -80,7 +81,7 @@ class RelationTest extends TestCase
         $this->assertEquals($relation->head, $two->head);
     }
 
-    /** @test */
+    #[Test]
     public function can_grab_multiple_relations()
     {
         $one = (new TestType())->factory()->create();
@@ -98,7 +99,7 @@ class RelationTest extends TestCase
         $this->assertEquals($relation[1]->head, $three->head);
     }
 
-    /** @test */
+    #[Test]
     public function can_grab_multiple_relations_reverse()
     {
         $one = (new TestType())->factory()->create();
@@ -117,7 +118,7 @@ class RelationTest extends TestCase
         $this->assertEquals($relation[1]->head, $three->head);
     }
 
-    /** @test */
+    #[Test]
     public function can_detach_one_type_from_another()
     {
 
@@ -139,7 +140,7 @@ class RelationTest extends TestCase
         $this->assertEquals($relation->link_type, $two->type());
     }    
 
-    /** @test */
+    #[Test]
     public function can_detach_several_types_from_another()
     {
         $one = (new TestType())->factory()->create();
@@ -161,7 +162,7 @@ class RelationTest extends TestCase
         $this->assertEquals($relation->link_type, $two->type());
     }        
 
-    /** @test */
+    #[Test]
     public function can_use_sync_to_add_and_remove_model_relationship()
     {
         $one = (new TestType())->factory()->create();
@@ -186,7 +187,7 @@ class RelationTest extends TestCase
         $this->assertTrue($sync->contains($four->id));
     }
 
-    /** @test */
+    #[Test]
     public function can_use_function_to_pull_data_into_dashboard()
     {
         $one = (new TestType())->factory()->create();

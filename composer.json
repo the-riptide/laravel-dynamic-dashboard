@@ -1,45 +1,60 @@
 {
-  "name": "the-riptide/laravel-dynamic-dashboard",
-  "description": "A way to generate a dynamic dashboard quickly and easily",
-  "type": "project",
-  "license": "MIT",
-  "keywords": [
-    "laravel",
-    "dashboard",
-    "dynamic"
-  ],
-  "authors": [
-    {
-      "name": "Jelte ten Holt",
-      "email": "jelte@theriptide.net",
-      "homepage": "https://www.theriptide.net/",
-      "role": "developer"
-    }
-  ],
-  "extra": {
-    "laravel": {
-      "providers": [
-        "TheRiptide\\LaravelDynamicDashboard\\DynamicDashboardServiceProvider"
-      ]
-    }
-  },
-  "autoload": {
-    "psr-4": {
-      "TheRiptide\\LaravelDynamicDashboard\\": "src/",
-      "TheRiptide\\LaravelDynamicDashboard\\Tests\\": "tests"
+    "name": "the-riptide/laravel-dynamic-dashboard",
+    "description": "A way to generate a dynamic dashboard quickly and easily",
+    "type": "library",
+    "license": "MIT",
+    "keywords": [
+        "laravel",
+        "dashboard",
+        "dynamic"
+    ],
+    "authors": [
+        {
+            "name": "Jelte ten Holt",
+            "email": "jelte@theriptide.net",
+            "homepage": "https://www.theriptide.net/",
+            "role": "developer"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [
+                "TheRiptide\\LaravelDynamicDashboard\\DynamicDashboardServiceProvider"
+            ]
+        }
     },
-    "files": [
-      "src/helpers.php"
-    ]
-  },
-  "minimum-stability": "dev",
-  "require": {
-    "php": "^8.0",
-    "laravel/framework": "^9.26",
-    "livewire/livewire": "^2.5",
-    "intervention/image": "^2.7",
-    "the-riptide/laravel-dashboard-components": "^0.1.11",
-    "doctrine/dbal": "^3.3"
-  }
-
+    "autoload": {
+        "psr-4": {
+            "TheRiptide\\LaravelDynamicDashboard\\": "src/"
+        },
+        "files": [
+            "src/helpers.php"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "TheRiptide\\LaravelDynamicDashboard\\Tests\\": "tests/",
+            "App\\": "tests/Fixtures/App/"
+        }
+    },
+    "require": {
+        "php": "^8.3",
+        "laravel/framework": "^13.0",
+        "livewire/livewire": "^3.0",
+        "intervention/image": "^4.0",
+        "the-riptide/laravel-dashboard-components": "dev-laravel-13"
+    },
+    "require-dev": {
+        "laravel/pint": "^1.0",
+        "orchestra/testbench": "^11.0",
+        "phpunit/phpunit": "^12.0"
+    },
+    "repositories": [
+        {
+            "type": "path",
+            "url": "../laravel-dashboard-components"
+        }
+    ],
+    "minimum-stability": "dev",
+    "prefer-stable": true
 }

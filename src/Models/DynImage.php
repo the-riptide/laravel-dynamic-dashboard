@@ -4,6 +4,7 @@ namespace TheRiptide\LaravelDynamicDashboard\Models;
 
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\File;
+use Intervention\Image\Drivers\Gd\Driver;
 use Intervention\Image\ImageManager;
 use TheRiptide\LaravelDynamicDashboard\Models\DynModel;
 use TheRiptide\LaravelDynamicDashboard\Factories\DynImageFactory;
@@ -13,7 +14,8 @@ class DynImage extends DynModel
     protected $table = 'dyn_strings';
     public $component = 'dashcomp::input.image';
  
-    public $rules = ['required|image', 'nullable'];    
+    /** allow_svg: Laravel 12 dropped SVG from the image rule; uploads accepted it before. */
+    public $rules = ['required|image:allow_svg', 'nullable'];
 
 
     protected static function newFactory()
@@ -75,10 +77,11 @@ class DynImage extends DynModel
                     File::makeDirectory($subPath);
                 }
         
-                (new ImageManager)
-                    ->make($fullPath)
-                    ->widen($width)
-                    ->save($subPath . $image);
+                // As with Intervention 2: JPEG quality 90, no EXIF auto-orientation.
+                ImageManager::usingDriver(Driver::class, autoOrientation: false)
+                    ->decodePath($fullPath)
+                    ->scale(width: $width)
+                    ->save($subPath . $image, quality: 90);
             }
         }
     }

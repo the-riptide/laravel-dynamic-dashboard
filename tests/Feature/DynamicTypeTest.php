@@ -1,8 +1,9 @@
 <?php
 
-namespace Tests\Feature;
+namespace TheRiptide\LaravelDynamicDashboard\Tests\Feature;
 
-use Tests\TestCase;
+use PHPUnit\Framework\Attributes\Test;
+use TheRiptide\LaravelDynamicDashboard\Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use TheRiptide\LaravelDynamicDashboard\Models\DynHead;
@@ -12,7 +13,7 @@ class DynamicTypeTest extends TestCase {
 
     use RefreshDatabase;
 
-    /** @test */
+    #[Test]
     public function dynamic_type_create_function_works()
     {
 
@@ -21,7 +22,7 @@ class DynamicTypeTest extends TestCase {
         foreach ($this->data() as $key => $item) $this->assertEquals($article->$key, $item);
     }
 
-    /** @test */
+    #[Test]
     public function dynamic_type_factory_function_works()
     {
         $article = (new TestType())->factory()->create();
@@ -31,7 +32,7 @@ class DynamicTypeTest extends TestCase {
         foreach ($article->models() as $model) $this->assertEquals($model->content, $article->{$model->name});
     }
 
-    /** @test */
+    #[Test]
     public function dynamic_type_create_function_works_together_with_factory()
     {
         $data = ['head' => 'Der 1. Gantrisch Loppet ist in Planung'];
@@ -46,7 +47,7 @@ class DynamicTypeTest extends TestCase {
         }
     }
 
-    /** @test */
+    #[Test]
     public function can_use_new_to_create_new_instance_of_type()
     {
         $test = new TestType;
@@ -60,7 +61,7 @@ class DynamicTypeTest extends TestCase {
         foreach ($fields as $key => $field) $this->assertEquals($new->models()[$key]->name, $key);
     }
 
-    /** @test */
+    #[Test]
     public function can_use_find_to_get_existing_model()
     {
         $test = (new TestType())->create($this->data());
@@ -70,7 +71,7 @@ class DynamicTypeTest extends TestCase {
         foreach ($this->data() as $key => $value ) $this->assertEquals($article->$key, $value); 
     }
 
-    /** @test */
+    #[Test]
     public function can_use_get_to_return_a_type_collection()
     {
         $test = new TestType;

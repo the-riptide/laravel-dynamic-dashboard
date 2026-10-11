@@ -1,8 +1,9 @@
 <?php
 
-namespace Tests\Feature;
+namespace TheRiptide\LaravelDynamicDashboard\Tests\Feature;
 
-use Tests\TestCase;
+use PHPUnit\Framework\Attributes\Test;
+use TheRiptide\LaravelDynamicDashboard\Tests\TestCase;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use TheRiptide\LaravelDynamicDashboard\Models\DynHead;
@@ -16,7 +17,7 @@ class ChangeTypeTest extends TestCase
 {
     use RefreshDatabase;
 
-    /** @test */
+    #[Test]
     public function can_remove_single_models_via_modify_type_run_function()
     {
         (new TestType)->factory()->create();
@@ -42,11 +43,11 @@ class ChangeTypeTest extends TestCase
         $after = (new TestType)->find($head->id, false);
 
         $this->assertCount(4, $after->models());
-        $this->assertObjectNotHasAttribute($string->name, $after);
+        $this->assertObjectNotHasProperty($string->name, $after);
         $this->assertNotEquals($after->models()[0], $string);
     }    
 
-    /** @test */
+    #[Test]
     public function can_remove_two_connected_models_via_modify_type_run_function()
     {
         (new TestType)->factory()->create();
@@ -80,13 +81,13 @@ class ChangeTypeTest extends TestCase
         $after = (new TestType)->find($head->id, false);
 
         $this->assertCount(4, $after->models());
-        $this->assertObjectNotHasAttribute($string->name, $after);
-        $this->assertObjectNotHasAttribute($text->name, $after);
+        $this->assertObjectNotHasProperty($string->name, $after);
+        $this->assertObjectNotHasProperty($text->name, $after);
         $this->assertNotEquals($after->models()[0], $string);
         $this->assertNotEquals($after->models()[1], $text);
     }    
 
-    /** @test */
+    #[Test]
     public function can_remove_two_unnconnected_models_via_modify_type_run_function()
     {
         (new TestType)->factory()->create();
@@ -128,13 +129,13 @@ class ChangeTypeTest extends TestCase
         $after = (new TestType)->find($head->id, false);
 
         $this->assertCount(4, $after->models());
-        $this->assertObjectNotHasAttribute($string->name, $after);
-        $this->assertObjectNotHasAttribute($text->name, $after);
+        $this->assertObjectNotHasProperty($string->name, $after);
+        $this->assertObjectNotHasProperty($text->name, $after);
         $this->assertNotEquals($after->models()[0], $string);
         $this->assertNotEquals($after->models()[2], $text);
     }    
 
-    /** @test */
+    #[Test]
     public function can_add_single_models_to_middle_via_modify_type_run_function()
     {
         (new TestType)->factory()->create();
@@ -148,7 +149,7 @@ class ChangeTypeTest extends TestCase
         $before = (new TestType)->find($head->id, false);
 
         $this->assertCount(3, $before->models());
-        $this->assertObjectNotHasAttribute($removed->name, $before);
+        $this->assertObjectNotHasProperty($removed->name, $before);
         $this->assertEquals($before->models()[0], $model);
 
         (new ModifyType)->run('TestType');
@@ -156,13 +157,13 @@ class ChangeTypeTest extends TestCase
         $after = (new TestType)->find($head->id, false);
 
         $this->assertCount(4, $after->models());
-        $this->assertObjectHasAttribute($removed->name, $after);
+        $this->assertObjectHasProperty($removed->name, $after);
 
         $this->assertEquals($after->models()[0]->name, $removed->name);
         $this->assertEquals($after->models()[1], $model);
     }    
 
-    /** @test */
+    #[Test]
     public function can_add_single_models_to_end_via_modify_type_run_function()
     {
         (new TestType)->factory()->create();
@@ -178,19 +179,19 @@ class ChangeTypeTest extends TestCase
         $before = (new TestType)->find($head->id, false);
 
         $this->assertCount(3, $before->models());
-        $this->assertObjectNotHasAttribute($removed->name, $before);
+        $this->assertObjectNotHasProperty($removed->name, $before);
 
         (new ModifyType)->run('TestType');
 
         $after = (new TestType)->find($head->id, false);
 
         $this->assertCount(4, $after->models());
-        $this->assertObjectHasAttribute($removed->name, $after);
+        $this->assertObjectHasProperty($removed->name, $after);
 
         $this->assertEquals($after->models()[2]->next_model, class_basename($removed));
     }    
     
-    /** @test */
+    #[Test]
     public function can_add_two_connected_models_via_modify_type_run_funtion()
     {
         (new TestType)->factory()->create();
@@ -205,8 +206,8 @@ class ChangeTypeTest extends TestCase
         $before = (new TestType)->find($head->id, false);
 
         $this->assertCount(2, $before->models());
-        $this->assertObjectNotHasAttribute($removedOne->name, $before);
-        $this->assertObjectNotHasAttribute($removedTwo->name, $before);
+        $this->assertObjectNotHasProperty($removedOne->name, $before);
+        $this->assertObjectNotHasProperty($removedTwo->name, $before);
         $this->assertEquals($before->models()[0], $model);
 
         (new ModifyType)->run('TestType');
@@ -214,15 +215,15 @@ class ChangeTypeTest extends TestCase
         $after = (new TestType)->find($head->id, false);
 
         $this->assertCount(4, $after->models());
-        $this->assertObjectHasAttribute($removedOne->name, $after);
-        $this->assertObjectHasAttribute($removedTwo->name, $after);
+        $this->assertObjectHasProperty($removedOne->name, $after);
+        $this->assertObjectHasProperty($removedTwo->name, $after);
 
         $this->assertEquals($after->models()[0]->name, $removedOne->name);
         $this->assertEquals($after->models()[1]->name, $removedTwo->name);
         $this->assertEquals($after->models()[2], $model);
     }
 
-    /** @test */
+    #[Test]
     public function can_add_two_unconnected_models_via_modify_type_run_funtion()
     {
         (new TestType)->factory()->create();
@@ -244,8 +245,8 @@ class ChangeTypeTest extends TestCase
         $before = (new TestType)->find($head->id, false);
 
         $this->assertCount(2, $before->models());
-        $this->assertObjectNotHasAttribute($removedOne->name, $before);
-        $this->assertObjectNotHasAttribute($removedTwo->name, $before);
+        $this->assertObjectNotHasProperty($removedOne->name, $before);
+        $this->assertObjectNotHasProperty($removedTwo->name, $before);
         $this->assertEquals($before->models()[0]->name, $modelOne->name);
         $this->assertEquals($before->models()[1], $modelTwo);
 
@@ -254,8 +255,8 @@ class ChangeTypeTest extends TestCase
         $after = (new TestType)->find($head->id, false);
 
         $this->assertCount(4, $after->models());
-        $this->assertObjectHasAttribute($removedOne->name, $after);
-        $this->assertObjectHasAttribute($removedTwo->name, $after);
+        $this->assertObjectHasProperty($removedOne->name, $after);
+        $this->assertObjectHasProperty($removedTwo->name, $after);
 
         $this->assertEquals($after->models()[0]->name, $removedOne->name);
         $this->assertEquals($after->models()[1]->name, $modelOne->name);
@@ -263,7 +264,7 @@ class ChangeTypeTest extends TestCase
         $this->assertEquals($after->models()[3], $modelTwo);
     }
 
-    /** @test */
+    #[Test]
     public function can_reorder_adjacent_models_via_modify_type_run_function()
     {
         (new TestType)->factory()->create();
@@ -302,7 +303,7 @@ class ChangeTypeTest extends TestCase
         $this->assertEquals($after->models()[1]->id, $modelTwo->id);
     }
 
-    /** @test */
+    #[Test]
     public function can_reorder_non_connected_models_via_modify_type_run_function()
     {
         (new TestType)->factory()->create();
@@ -345,7 +346,7 @@ class ChangeTypeTest extends TestCase
         $this->assertEquals($after->models()[2]->id, $modelThree->id);
     }
 
-    /** @test */
+    #[Test]
     public function can_reorder_after_first_model_moved_to_end_via_modify_type_run_function()
     {
         (new TestType)->factory()->create();
@@ -385,7 +386,7 @@ class ChangeTypeTest extends TestCase
         $this->assertEquals($after->models()[1]->id, $modelTwo->id);
     }
 
-    /** @test */
+    #[Test]
     public function can_reorder_after_an_almost_total_restructure_via_modify_type_run_function()
     {
         (new TestType)->factory()->create();
@@ -440,7 +441,7 @@ class ChangeTypeTest extends TestCase
         $this->assertEquals($after->models()[3]->id, $modelFour->id);
     }
 
-    /** @test */
+    #[Test]
     public function can_reorder_after_a_total_restructure_via_modify_type_run_function()
     {
         (new TestType)->factory()->create();
@@ -495,7 +496,7 @@ class ChangeTypeTest extends TestCase
         $this->assertEquals($after->models()[3]->id, $modelFour->id);
     }
 
-    /** @test */
+    #[Test]
     public function can_change_a_model_type_via_modify_type_run_function()
     {
         (new TestType)->factory()->create();
@@ -532,7 +533,7 @@ class ChangeTypeTest extends TestCase
         $this->assertEquals($after->models()[0]->content, $model->content);
     }
 
-    /** @test */
+    #[Test]
     public function can_change_last_model_type_via_modify_type_run_function()
     {
         (new TestType)->factory()->create();
