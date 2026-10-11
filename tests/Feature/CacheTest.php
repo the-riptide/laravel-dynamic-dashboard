@@ -3,16 +3,14 @@
 namespace TheRiptide\LaravelDynamicDashboard\Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Cache;
 use PHPUnit\Framework\Attributes\Test;
-use TheRiptide\LaravelDynamicDashboard\Tests\TestCase;
 use TheRiptide\LaravelDynamicDashboard\Models\DynString;
+use TheRiptide\LaravelDynamicDashboard\Tests\TestCase;
 use TheRiptide\LaravelDynamicDashboard\Types\TestType;
 
 class CacheTest extends TestCase
 {
-
     use RefreshDatabase;
 
     #[Test]
@@ -28,6 +26,4 @@ class CacheTest extends TestCase
         $this->assertSame('Changed', (new TestType)->find((string) $test->id, false)->head);
         $this->assertSame('Changed', (new TestType)->find((string) $test->id)->head);
     }
-    
-
 }

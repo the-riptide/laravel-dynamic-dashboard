@@ -2,19 +2,20 @@
 
 namespace TheRiptide\LaravelDynamicDashboard\Models;
 
-use Illuminate\Support\Str;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Str;
 
 abstract class DynBase extends Model
 {
     use HasFactory;
 
-    private $path = 'TheRiptide\LaravelDynamicDashboard\Models\\'; 
+    private $path = 'TheRiptide\LaravelDynamicDashboard\Models\\';
 
-    public function conNext($model) : Model {
+    public function conNext($model): Model
+    {
 
         $this->next_model = $model ? class_basename($model) : null;
         $this->next_model_id = $model ? $model->id : null;
@@ -22,59 +23,66 @@ abstract class DynBase extends Model
         return $this;
     }
 
-    public function getNext() : Model|null {
+    public function getNext(): ?Model
+    {
 
         if ($this->next_model) {
 
-            $model = $this->path . $this->next_model;
-            return (new $model)->find($this->next_model_id);
-        }
+            $model = $this->path.$this->next_model;
 
-        else return null;
+            return (new $model)->find($this->next_model_id);
+        } else {
+            return null;
+        }
     }
 
     public function getType()
     {
         $model = $this->dyn_type == 'TestType'
             ? 'TheRiptide\LaravelDynamicDashboard\Types\TestType'
-            : 'App\\' . config('dyndash.folder') . '\\' . Str::of($this->dyn_type)->camel()->ucfirst(); 
+            : 'App\\'.config('dyndash.folder').'\\'.Str::of($this->dyn_type)->camel()->ucfirst();
 
-        return $this->exists() 
+        return $this->exists()
             ? (new $model($this))->find($this->id)
             : (new $model($this))->new();
     }
-    
-    public function getAll(Collection|null $collection = null) : Collection {
 
-        if (!$collection) $collection = collect([$this]);
+    public function getAll(?Collection $collection = null): Collection
+    {
+
+        if (! $collection) {
+            $collection = collect([$this]);
+        }
 
         if ($model = $this->getNext()) {
             return $model->getAll($collection->push($model));
-        }
-        else {
+        } else {
             return $collection;
         }
     }
 
-    public function unsetTempAttributes() : Model
+    public function unsetTempAttributes(): Model
     {
         $fields = Schema::getColumnListing($this->getTable());
 
-        foreach($this->getAttributes() as $key => $attribute)
-        {
-            if (!in_array($key, $fields)) {
-                
+        foreach ($this->getAttributes() as $key => $attribute) {
+            if (! in_array($key, $fields)) {
+
                 unset($this->$key);
-            } 
+            }
         }
+
         return $this;
     }
 
-    protected function deleteNext() {
+    protected function deleteNext()
+    {
 
         $next = $this->getNext();
-        if ($next) $next->deleteNext();
-        
+        if ($next) {
+            $next->deleteNext();
+        }
+
         $this->delete();
     }
 }

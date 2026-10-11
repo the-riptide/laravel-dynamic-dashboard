@@ -1,10 +1,11 @@
 <?php
 
 namespace TheRiptide\LaravelDynamicDashboard\Commands;
- 
-use TheRiptide\LaravelDynamicDashboard\Tools\CreateType;
+
+use App\Support\DripEmailer;
 use Illuminate\Console\Command;
- 
+use TheRiptide\LaravelDynamicDashboard\Tools\CreateType;
+
 class CreateTypeCommand extends Command
 {
     /**
@@ -13,18 +14,18 @@ class CreateTypeCommand extends Command
      * @var string
      */
     protected $signature = 'dyndash:create {type}';
- 
+
     /**
      * The console command description.
      *
      * @var string
      */
     protected $description = 'create a DynDash type';
- 
+
     /**
      * Execute the console command.
      *
-     * @param  \App\Support\DripEmailer  $drip
+     * @param  DripEmailer  $drip
      * @return mixed
      */
     public function handle()

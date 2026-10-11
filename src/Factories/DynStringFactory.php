@@ -2,16 +2,13 @@
 
 namespace TheRiptide\LaravelDynamicDashboard\Factories;
 
-use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Str;
 use TheRiptide\LaravelDynamicDashboard\Models\DynString;
-
 
 class DynStringFactory extends Factory
 {
-
     protected $model = DynString::class;
-
 
     /**
      * Define the model's default state.

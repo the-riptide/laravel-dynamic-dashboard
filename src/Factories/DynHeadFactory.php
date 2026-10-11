@@ -8,9 +8,7 @@ use TheRiptide\LaravelDynamicDashboard\Models\DynHead;
 
 class DynHeadFactory extends Factory
 {
-
     protected $model = DynHead::class;
-
 
     /**
      * Define the model's default state.

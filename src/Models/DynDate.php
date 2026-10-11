@@ -3,11 +3,11 @@
 namespace TheRiptide\LaravelDynamicDashboard\Models;
 
 use TheRiptide\LaravelDynamicDashboard\Factories\DynDateFactory;
-use TheRiptide\LaravelDynamicDashboard\Models\DynModel;
 
 class DynDate extends DynModel
 {
     public $rules = 'required|date';
+
     public $type = 'date';
 
     protected $casts = [
@@ -25,6 +25,4 @@ class DynDate extends DynModel
             ? $this->content->format('Y-m-d')
             : null;
     }
-
-
 }

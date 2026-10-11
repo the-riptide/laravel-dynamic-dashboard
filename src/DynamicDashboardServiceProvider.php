@@ -2,18 +2,19 @@
 
 namespace TheRiptide\LaravelDynamicDashboard;
 
-use Livewire\Livewire;
 use Illuminate\Support\ServiceProvider;
-use TheRiptide\LaravelDynamicDashboard\Tools\ManageImage;
+use Livewire\Livewire;
 use TheRiptide\LaravelDynamicDashboard\Commands\CreateTypeCommand;
 use TheRiptide\LaravelDynamicDashboard\Commands\ModifyTypeCommand;
 use TheRiptide\LaravelDynamicDashboard\Commands\UpdateTypeCommand;
 use TheRiptide\LaravelDynamicDashboard\Http\Livewire\DashboardIndex;
 use TheRiptide\LaravelDynamicDashboard\Http\Livewire\DashboardManage;
+use TheRiptide\LaravelDynamicDashboard\Tools\ManageImage;
 
 class DynamicDashboardServiceProvider extends ServiceProvider
 {
-    public function boot() {
+    public function boot()
+    {
 
         $this->loadViewsFrom(__DIR__.'/../views', 'dyndash');
 
@@ -45,13 +46,10 @@ class DynamicDashboardServiceProvider extends ServiceProvider
         Livewire::component('dashboard-manage', DashboardManage::class);
         Livewire::component('dashboard-index', DashboardIndex::class);
 
-        $this->app->singleton('ManageImage', function() {
-            return new ManageImage();
+        $this->app->singleton('ManageImage', function () {
+            return new ManageImage;
         });
     }
 
-    public function register() {
-
-
-    }
+    public function register() {}
 }

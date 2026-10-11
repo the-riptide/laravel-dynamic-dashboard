@@ -1,10 +1,11 @@
 <?php
 
 namespace TheRiptide\LaravelDynamicDashboard\Commands;
- 
+
+use App\Support\DripEmailer;
 use Illuminate\Console\Command;
 use TheRiptide\LaravelDynamicDashboard\Tools\ModifyType;
- 
+
 class ModifyTypeCommand extends Command
 {
     /**
@@ -13,18 +14,18 @@ class ModifyTypeCommand extends Command
      * @var string
      */
     protected $signature = 'dyndash:modify {type?}';
- 
+
     /**
      * The console command description.
      *
      * @var string
      */
     protected $description = 'modify existing models to new fields';
- 
+
     /**
      * Execute the console command.
      *
-     * @param  \App\Support\DripEmailer  $drip
+     * @param  DripEmailer  $drip
      * @return mixed
      */
     public function handle()

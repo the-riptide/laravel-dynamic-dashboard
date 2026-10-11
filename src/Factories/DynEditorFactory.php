@@ -2,8 +2,8 @@
 
 namespace TheRiptide\LaravelDynamicDashboard\Factories;
 
-use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Str;
 use TheRiptide\LaravelDynamicDashboard\Models\DynEditor;
 
 class DynEditorFactory extends Factory

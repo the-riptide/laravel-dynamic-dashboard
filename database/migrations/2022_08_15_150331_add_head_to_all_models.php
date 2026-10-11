@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        foreach($this->tables() as $table ) {
+        foreach ($this->tables() as $table) {
             Schema::table($table, function (Blueprint $table) {
                 $table->string('dyn_type')->nullable();
                 $table->unsignedBigInteger('dyn_head_id')->nullable();
@@ -28,7 +28,7 @@ return new class extends Migration
      */
     public function down()
     {
-        foreach($this->tables() as $table ) {
+        foreach ($this->tables() as $table) {
             Schema::table($table, function (Blueprint $table) {
                 $table->dropColumn('dyn_type');
                 $table->dropColumn('dyn_head_id');

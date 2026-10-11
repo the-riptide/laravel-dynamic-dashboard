@@ -2,15 +2,13 @@
 
 namespace TheRiptide\LaravelDynamicDashboard\Factories;
 
-use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Str;
 use TheRiptide\LaravelDynamicDashboard\Models\DynDate;
 
 class DynDateFactory extends Factory
 {
-
     protected $model = DynDate::class;
-
 
     /**
      * Define the model's default state.

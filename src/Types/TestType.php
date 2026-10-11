@@ -1,20 +1,20 @@
 <?php
 
-namespace TheRiptide\LaravelDynamicDashboard\Types; 
+namespace TheRiptide\LaravelDynamicDashboard\Types;
 
 use Illuminate\Support\Collection;
 use TheRiptide\LaravelDynamicDashboard\Objects\DynamicBase;
 
-class TestType extends DynamicBase 
+class TestType extends DynamicBase
 {
-    public function index() : Collection
+    public function index(): Collection
     {
         return collect([
             'head',
         ]);
     }
 
-    public function fields() : Collection
+    public function fields(): Collection
     {
         return collect([
 
@@ -26,7 +26,7 @@ class TestType extends DynamicBase
                     'placeholder' => 'Bitte tragen Sie den Titel des Artikels ein',
                 ],
             ],
-            
+
             'neck' => [
                 'type' => 'string',
 
@@ -52,7 +52,7 @@ class TestType extends DynamicBase
         ]);
     }
 
-    public function relationships() : Collection
+    public function relationships(): Collection
     {
         return collect([
             'Article' => [

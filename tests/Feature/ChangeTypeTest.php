@@ -2,16 +2,15 @@
 
 namespace TheRiptide\LaravelDynamicDashboard\Tests\Feature;
 
-use PHPUnit\Framework\Attributes\Test;
-use TheRiptide\LaravelDynamicDashboard\Tests\TestCase;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use TheRiptide\LaravelDynamicDashboard\Models\DynHead;
-use TheRiptide\LaravelDynamicDashboard\Models\DynText;
-use TheRiptide\LaravelDynamicDashboard\Types\TestType;
+use PHPUnit\Framework\Attributes\Test;
 use TheRiptide\LaravelDynamicDashboard\Models\DynEditor;
+use TheRiptide\LaravelDynamicDashboard\Models\DynHead;
 use TheRiptide\LaravelDynamicDashboard\Models\DynString;
+use TheRiptide\LaravelDynamicDashboard\Models\DynText;
+use TheRiptide\LaravelDynamicDashboard\Tests\TestCase;
 use TheRiptide\LaravelDynamicDashboard\Tools\ModifyType;
+use TheRiptide\LaravelDynamicDashboard\Types\TestType;
 
 class ChangeTypeTest extends TestCase
 {
@@ -45,7 +44,7 @@ class ChangeTypeTest extends TestCase
         $this->assertCount(4, $after->models());
         $this->assertObjectNotHasProperty($string->name, $after);
         $this->assertNotEquals($after->models()[0], $string);
-    }    
+    }
 
     #[Test]
     public function can_remove_two_connected_models_via_modify_type_run_function()
@@ -85,7 +84,7 @@ class ChangeTypeTest extends TestCase
         $this->assertObjectNotHasProperty($text->name, $after);
         $this->assertNotEquals($after->models()[0], $string);
         $this->assertNotEquals($after->models()[1], $text);
-    }    
+    }
 
     #[Test]
     public function can_remove_two_unnconnected_models_via_modify_type_run_function()
@@ -133,7 +132,7 @@ class ChangeTypeTest extends TestCase
         $this->assertObjectNotHasProperty($text->name, $after);
         $this->assertNotEquals($after->models()[0], $string);
         $this->assertNotEquals($after->models()[2], $text);
-    }    
+    }
 
     #[Test]
     public function can_add_single_models_to_middle_via_modify_type_run_function()
@@ -161,7 +160,7 @@ class ChangeTypeTest extends TestCase
 
         $this->assertEquals($after->models()[0]->name, $removed->name);
         $this->assertEquals($after->models()[1], $model);
-    }    
+    }
 
     #[Test]
     public function can_add_single_models_to_end_via_modify_type_run_function()
@@ -189,8 +188,8 @@ class ChangeTypeTest extends TestCase
         $this->assertObjectHasProperty($removed->name, $after);
 
         $this->assertEquals($after->models()[2]->next_model, class_basename($removed));
-    }    
-    
+    }
+
     #[Test]
     public function can_add_two_connected_models_via_modify_type_run_funtion()
     {
@@ -229,12 +228,12 @@ class ChangeTypeTest extends TestCase
         (new TestType)->factory()->create();
         $head = DynHead::first();
 
-        $models = $head->getAll(); 
+        $models = $head->getAll();
         $removedOne = $models[1];
         $modelOne = $models[2];
         $removedTwo = $models[3];
         $modelTwo = $models[4];
-        
+
         $head->conNext($modelOne);
         $head->save();
         $head = $head->fresh();
@@ -280,10 +279,10 @@ class ChangeTypeTest extends TestCase
 
         $modelTwo->connext($modelOne);
         $modelTwo->save();
-        
+
         $modelOne->connext($modelThree);
         $modelOne->save();
-        
+
         $before = (new TestType)->find($head->id, false);
 
         $this->assertCount(4, $before->models());
@@ -320,10 +319,10 @@ class ChangeTypeTest extends TestCase
 
         $modelThree->connext($modelTwo);
         $modelThree->save();
-        
+
         $modelTwo->connext($modelOne);
         $modelTwo->save();
-        
+
         $modelOne->connext($modelFour);
         $modelOne->save();
 
@@ -468,7 +467,7 @@ class ChangeTypeTest extends TestCase
         $modelOne->next_model = null;
         $modelOne->next_model_id = null;
         $modelOne->save();
-        
+
         $before = (new TestType)->find($head->id, false);
 
         $this->assertCount(4, $before->models());
@@ -522,7 +521,7 @@ class ChangeTypeTest extends TestCase
         $this->assertEquals(class_basename($before->models()[0]), 'DynEditor');
         $this->assertEquals($before->models()[0]->name, $model->name);
         $this->assertEquals($before->models()[0]->content, $model->content);
-        
+
         (new ModifyType)->run('TestType');
 
         $after = (new TestType)->find($head->id, false);
@@ -559,7 +558,7 @@ class ChangeTypeTest extends TestCase
         $this->assertEquals(class_basename($before->models()[3]), 'DynEditor');
         $this->assertEquals($before->models()[3]->name, $model->name);
         $this->assertEquals($before->models()[3]->content, $model->content);
-        
+
         (new ModifyType)->run('TestType');
 
         $after = (new TestType)->find($head->id, false);

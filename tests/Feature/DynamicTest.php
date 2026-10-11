@@ -2,14 +2,13 @@
 
 namespace TheRiptide\LaravelDynamicDashboard\Tests\Feature;
 
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
-use TheRiptide\LaravelDynamicDashboard\Tests\TestCase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use TheRiptide\LaravelDynamicDashboard\Models\DynHead;
-use TheRiptide\LaravelDynamicDashboard\Models\DynText;
 use TheRiptide\LaravelDynamicDashboard\Models\DynString;
+use TheRiptide\LaravelDynamicDashboard\Models\DynText;
+use TheRiptide\LaravelDynamicDashboard\Tests\TestCase;
 
 class DynamicTest extends TestCase
 {
@@ -23,7 +22,7 @@ class DynamicTest extends TestCase
         $text = (new $component)->factory()->create();
 
         $head = $head->conNext($text);
-        
+
         $this->assertEquals($head->next_model_id, $text->id);
         $this->assertEquals($head->next_model, class_basename($text));
     }
@@ -55,7 +54,8 @@ class DynamicTest extends TestCase
     }
 
     #[Test]
-    public function can_use_get_all_to_get_all_components() {
+    public function can_use_get_all_to_get_all_components()
+    {
 
         $head = DynHead::factory()->create();
         $textOne = DynText::factory()->create();
@@ -93,8 +93,8 @@ class DynamicTest extends TestCase
         $this->assertEquals(DynHead::count(), 0);
         $this->assertEquals(DynText::count(), 0);
 
-
     }
+
     #[Test]
     public function can_get_text_by_name()
     {
@@ -110,7 +110,8 @@ class DynamicTest extends TestCase
     }
 
     #[Test]
-    public function can_unset_temporary_attributes_on_dynamic_model(){
+    public function can_unset_temporary_attributes_on_dynamic_model()
+    {
 
         $text = DynText::Factory()->create();
 

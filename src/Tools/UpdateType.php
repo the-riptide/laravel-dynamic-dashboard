@@ -1,15 +1,17 @@
-<?php 
+<?php
 
 namespace TheRiptide\LaravelDynamicDashboard\Tools;
 
 use TheRiptide\LaravelDynamicDashboard\Traits\GetType;
 
-class UpdateType {
-
+class UpdateType
+{
     use GetType, UseCache;
 
     private $models;
+
     private $fields;
+
     private $type;
 
     public function run()
@@ -18,10 +20,10 @@ class UpdateType {
 
             $this->getType($type)
                 ->get(false)
-                ->map( 
+                ->map(
                     fn ($item) => $this->fix($item)
-                );                    
-            }
+                );
+        }
         );
     }
 
@@ -30,12 +32,11 @@ class UpdateType {
 
         $head = $item->head();
         $item->models()
-        ->map(
-            function ($model) use ($head) 
-            {
-                $model->attachHead($head);
-                $model->save();
-            }
-        );
+            ->map(
+                function ($model) use ($head) {
+                    $model->attachHead($head);
+                    $model->save();
+                }
+            );
     }
 }

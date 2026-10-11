@@ -3,7 +3,6 @@
 namespace TheRiptide\LaravelDynamicDashboard\Models;
 
 use Illuminate\Support\Str;
-use TheRiptide\LaravelDynamicDashboard\Models\DynBase;
 use TheRiptide\LaravelDynamicDashboard\Factories\DynHeadFactory;
 
 class DynHead extends DynBase
@@ -17,35 +16,35 @@ class DynHead extends DynBase
 
     protected static function booted()
     {
-        static::created(function ($post) 
-        {
+        static::created(function ($post) {
             $post->update([
-                'dyn_order' => DynHead::count() == 0 
-                    ? 1 
-                    : DynHead::where('dyn_type', $post->dyn_type)->max('dyn_order') + 1
-                ]
-            ); 
+                'dyn_order' => DynHead::count() == 0
+                    ? 1
+                    : DynHead::where('dyn_type', $post->dyn_type)->max('dyn_order') + 1,
+            ]
+            );
         });
     }
 
-    public function setSlug($text) {
+    public function setSlug($text)
+    {
 
         if (! $this->slug) {
 
             $text = Str::of($text)->words(4)->slug('-')->__toString();
-            $count = (new $this)->where('dyn_type', $this->dyn_type)->where('slug', 'like', $text . '%')->count();
-    
+            $count = (new $this)->where('dyn_type', $this->dyn_type)->where('slug', 'like', $text.'%')->count();
+
             $this->slug = ($count === 0)
                 ? $text
-                : $text . '-' . $count;
+                : $text.'-'.$count;
         }
     }
 
-    public function deleteAll() {
+    public function deleteAll()
+    {
 
         $this->deleteNext();
 
         $this->delete();
     }
 }
-

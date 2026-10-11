@@ -1,9 +1,10 @@
-<?php 
+<?php
 
 if (! function_exists('srcset')) {
 
-    function srcset($model, $image = 'url') {
+    function srcset($model, $image = 'url')
+    {
 
-        return app('ManageImage')->prepSrcset($model, $image);    
+        return app('ManageImage')->prepSrcset($model, $image);
     }
 }

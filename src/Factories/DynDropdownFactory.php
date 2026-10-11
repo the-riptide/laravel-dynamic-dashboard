@@ -2,15 +2,13 @@
 
 namespace TheRiptide\LaravelDynamicDashboard\Factories;
 
-use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Str;
 use TheRiptide\LaravelDynamicDashboard\Models\DynDropdown;
 
 class DynDropdownFactory extends Factory
 {
-
     protected $model = DynDropdown::class;
-
 
     /**
      * Define the model's default state.
