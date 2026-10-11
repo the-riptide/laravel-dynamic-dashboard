@@ -5,13 +5,13 @@ namespace ExampleNameSpace;
 use Illuminate\Support\Collection;
 use TheRiptide\LaravelDynamicDashboard\Objects\DynamicBase;
 
-class ExampleName extends DynamicBase {
-
+class ExampleName extends DynamicBase
+{
     /** The 'index' method decides on fields that will show up on the dashboard index. Simply include a name if it's an attribute that should be included as is.
      * If you're accessing a method, create a sub-array where you set 'function' to true. In this way, the function will be accessed and whatever is returned
-     * will be displayed in that column. 
+     * will be displayed in that column.
      */
-    public function index() : Collection
+    public function index(): Collection
     {
         return collect([
             'title',
@@ -21,7 +21,7 @@ class ExampleName extends DynamicBase {
         ]);
     }
 
-    public function show($item) : string
+    public function show($item): string
     {
 
         return $item->show
@@ -29,14 +29,13 @@ class ExampleName extends DynamicBase {
             : 'no';
     }
 
-    /** The field method determines the fields that will be set in the model. Two fields are mandatory, the 'key' and the 'type'. 
+    /** The field method determines the fields that will be set in the model. Two fields are mandatory, the 'key' and the 'type'.
      * The Key determines the name of the attribute you're setting and can be used anywhere to call that attribute.
      * The Type, which must be set in a sub array, decides what kind of data will be stored in that field. You can see a full list of available types in the readme
      * It is possible to set other values as well including the validation rules (rules) and the placeholder text (placeholder).
      * See a full list of the options in the readme.
-    */
-
-    public function fields() : Collection
+     */
+    public function fields(): Collection
     {
         return collect([
 
@@ -47,7 +46,6 @@ class ExampleName extends DynamicBase {
                     'placeholder' => 'Enter your title here...',
                 ],
             ],
-
 
             'show' => [
                 'type' => 'boolean',
@@ -85,17 +83,17 @@ class ExampleName extends DynamicBase {
         ]);
     }
 
-    /** Here you can set up relationships to this type. The Key should match the Type that you're creating a relationship with. 
+    /** Here you can set up relationships to this type. The Key should match the Type that you're creating a relationship with.
      * In a sub array, you can set what will be shown in the in the dropdown by specing 'show' (e.g. ['show' => 'head']) */
-    public function relationships() : Collection
+    public function relationships(): Collection
     {
         return collect([
             'Event' => [
                 'show' => 'name',
             ],
             'Timer' => [
-                'show' => 
-            ]
+                'show' => 'name',
+            ],
         ]);
     }
 }
